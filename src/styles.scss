@@ -1,1 +1,126 @@
 /* You can add global styles to this file, and also import other style files */
+@use "./app/home/containers/home.theme" as home;
+@import "~@angular/material/theming";
+@include mat-core();
+
+$light-app-theme: mat-light-theme(
+  (
+    color: (
+      primary: mat-palette($mat-indigo),
+      accent: mat-palette($mat-pink, A200, A100, A400),
+      warn: mat-palette($mat-red),
+    ),
+  )
+);
+
+$dark-app-theme: mat-dark-theme(
+  (
+    color: (
+      primary: mat-palette($mat-pink),
+      accent: mat-palette($mat-blue-gray, A200, A100, A400),
+      warn: mat-palette($mat-amber),
+    ),
+  )
+);
+
+@mixin base-theme($theme) {
+  $primary: map-get($theme, primary);
+  $_background: map-get($theme, background);
+  .tab-group-card {
+    background: mat-color($_background, card);
+  }
+  a.link {
+    color: mat-color($primary);
+  }
+}
+
+@include angular-material-theme($light-app-theme);
+@include base-theme($light-app-theme);
+@include home.theme($light-app-theme);
+
+.dark-theme {
+  @include angular-material-color($dark-app-theme);
+  @include base-theme($dark-app-theme);
+  @include home.theme($dark-app-theme);
+}
+
+html,
+body {
+  height: 100vh;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.banner-slot {
+  width: 320px;
+  height: 100px;
+  margin: auto;
+}
+@media (min-width: 500px) {
+  .banner-slot {
+    width: 468px;
+    height: 60px;
+  }
+}
+@media (min-width: 800px) {
+  .banner-slot {
+    width: 728px;
+    height: 90px;
+  }
+}
+
+.w-48 {
+  width: 48px;
+}
+
+.w-72 {
+  width: 72px;
+}
+
+.w-96 {
+  width: 96px;
+}
+
+.w-120 {
+  width: 120px;
+}
+
+.w-192 {
+  width: 192px;
+}
+
+.w-240 {
+  width: 240px;
+}
+
+.p-16 {
+  padding: 16px;
+}
+
+.grade-4 {
+  color: #f39303;
+}
+
+.grade-5 {
+  color: #ff6000;
+}
+
+.grade-6 {
+  color: #c9a472;
+}
+
+.filler {
+  flex-grow: 1;
+}
+
+.flex-baseline {
+  display: flex;
+  align-items: baseline;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
