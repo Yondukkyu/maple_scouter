@@ -5,6 +5,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 
+
+import { jobNames, jobs } from 'src/app/data/job_data';
+import { TemplateJobData } from 'src/app/data/data_format';
+
 @Component({
   selector: 'app-container',
   templateUrl: './scouter.component.html',
@@ -13,11 +17,15 @@ import { Title } from '@angular/platform-browser';
 export class ScouterComponent implements OnInit {
 
 
-
+  job_names = jobs;
+  jobName:jobNames = '나이트로드';
+  jobdata:TemplateJobData = new TemplateJobData(this.jobName);
 
   worker!: Worker;
   isLoading = false;
   progress = 0;
+
+  
 
 
   constructor(
@@ -44,7 +52,12 @@ export class ScouterComponent implements OnInit {
     
   }
 
+  initializeJobValues()
+  {
+    this.jobdata = new TemplateJobData(this.jobName);
 
+
+  }
 
   
 

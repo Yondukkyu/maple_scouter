@@ -1,5 +1,5 @@
 
-function optimizeHyperUnion(cur_mainStatPure:number,
+export function optimizeHyperUnion(cur_mainStatPure:number,
                             cur_mainStatPer:number,
                             cur_mainStatAbs:number,
                             cur_subStatPure:number,
