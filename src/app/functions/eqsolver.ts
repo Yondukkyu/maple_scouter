@@ -68,17 +68,15 @@ class Complex {
         
         }
     
-    get argument(){return Math.atan2(this._y,this._x)}
-    
-    }
-    
+  get argument(){return Math.atan2(this._y,this._x)}
+}
     
     
     
     
-    function CubicFormula1(a1:number, b1:number, c1:number, d1:number, dam1:number) {
     
-    
+export function CubicFormula1(a1:number, b1:number, c1:number, d1:number, dam1:number) {
+
         var a = b1/a1;
         var b = c1/a1;
         var x1;
@@ -133,4 +131,4 @@ class Complex {
     
       return x1;
       
-    }
+}

@@ -67,7 +67,7 @@ function gauss(A:number[][], x:number[]) {
 }
 
 
-function polynomial_regression(x_elem:number[],y_elem:number[],order:number)
+export function polynomial_regression(x_elem:number[],y_elem:number[],order:number)
 {
   var data_size = x_elem.length;
 
