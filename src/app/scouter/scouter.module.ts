@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { AdsenseModule } from 'ng2-adsense';
 
 
 import { ScouterComponent } from './containers/scouter.component';
@@ -52,6 +53,7 @@ import { ScouterRoutingModule } from './scouter-routing.module';
     MatRadioModule,
     MatDialogModule,
     ClipboardModule,
+    AdsenseModule,
   ]
 })
 export class ScouterModule { }

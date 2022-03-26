@@ -9,8 +9,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Angulartics2Module } from 'angulartics2';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AdsenseModule } from 'ng2-adsense';
 
+
+import { AppComponent } from './app.component';
 import { HomeModule } from './home/home.module';
 import { ScouterModule } from './scouter/scouter.module';
 
@@ -31,6 +33,9 @@ import { ScouterModule } from './scouter/scouter.module';
     Angulartics2Module.forRoot(),
     HomeModule,
     ScouterModule,
+    AdsenseModule.forRoot({
+      adClient: 'ca-pub-2274135837798953',
+    }),
 
   ],
   providers: [],
