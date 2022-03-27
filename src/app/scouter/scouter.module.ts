@@ -19,16 +19,24 @@ import { MatTableModule } from '@angular/material/table';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { AdsenseModule } from 'ng2-adsense';
 
-
-import { ScouterComponent } from './containers/scouter.component';
-
 import { ScouterRoutingModule } from './scouter-routing.module';
+import { ScouterComponent } from './containers/scouter.component';
+import { StatTableComponent } from './containers/stat-table/stat-table.component';
+import { EquipTableComponent } from './containers/equip-table/equip-table.component';
+import { LinkTableComponent } from './containers/link-table/link-table.component';
+import { CoreTableComponent } from './containers/core-table/core-table.component';
+import { AuxiliaryTableComponent } from './containers/auxiliary-table/auxiliary-table.component';
 
 
 
 @NgModule({
   declarations: [
     ScouterComponent,
+    StatTableComponent,
+    EquipTableComponent,
+    LinkTableComponent,
+    CoreTableComponent,
+    AuxiliaryTableComponent,
 
 
   ],

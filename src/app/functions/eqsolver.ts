@@ -75,7 +75,7 @@ class Complex {
     
     
     
-export function CubicFormula1(a1:number, b1:number, c1:number, d1:number, dam1:number) {
+export function CubicSolver(a1:number, b1:number, c1:number, d1:number, dam1:number) {
 
         var a = b1/a1;
         var b = c1/a1;
