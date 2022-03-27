@@ -5,12 +5,15 @@ import { Event, NavigationEnd, Router } from '@angular/router';
 import { Angulartics2GoogleGlobalSiteTag } from 'angulartics2';
 import { filter, map, pairwise, startWith } from 'rxjs';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private dialog: MatDialog,

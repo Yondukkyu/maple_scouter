@@ -1,0 +1,18 @@
+<mat-card>
+    <mat-card-subtitle>장비, 스탯 정보 입력</mat-card-subtitle>
+    <mat-card-content>
+        <div *ngFor="let list of equip_table_list; let i = index">
+            <mat-form-field class = "w-192">          
+                <mat-label> {{list}} </mat-label>
+                <input
+                  type="number"
+                  matInput
+                  [(ngModel)]="equip_table[i]"
+                  appSelectOnFocus
+                />
+            </mat-form-field>
+        </div>
+
+            
+    </mat-card-content>
+</mat-card>

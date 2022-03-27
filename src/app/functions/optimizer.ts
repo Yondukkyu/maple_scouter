@@ -1,20 +1,20 @@
 
-export function optimizeHyperUnion(cur_mainStatPure:number,
-                            cur_mainStatPer:number,
-                            cur_mainStatAbs:number,
-                            cur_subStatPure:number,
-                            cur_subStatPer:number,
-                            cur_subStatAbs:number,
-                            cur_criProb:number,
-                            cur_criDamage:number,
-                            cur_armorIgnore:number,
-                            cur_damageSum:number,
-                            cur_attPower:number,
-                            hyp_totalPoint:number,
-                            union_totalBlock:number,
-                            union_reserved:number,
-                            criReinP:number,
-                            bossArmor:number)
+export function optimizeHyperUnion( cur_mainStatPure:number,
+                                    cur_mainStatPer:number,
+                                    cur_mainStatAbs:number,
+                                    cur_subStatPure:number,
+                                    cur_subStatPer:number,
+                                    cur_subStatAbs:number,
+                                    cur_criProb:number,
+                                    cur_criDamage:number,
+                                    cur_armorIgnore:number,
+                                    cur_damageSum:number,
+                                    cur_attPower:number,
+                                    hyp_totalPoint:number,
+                                    union_totalBlock:number,
+                                    union_reserved:number,
+                                    criReinP:number,
+                                    bossArmor:number)
 {
     const  hyp_pointCost = [0, 1, 2, 4, 8, 10, 15, 20, 25, 30, 35, 50, 65, 80, 95, 110, Infinity];
     const  hyp_valueList = [
@@ -39,8 +39,8 @@ export function optimizeHyperUnion(cur_mainStatPure:number,
           15 //attPower : 7
     ];
     //초기 레벨 값 설정
-    const hyp_lvlList = [0, 0, 0, 0, 0, 0, 0, 0];
-    const uni_lvlList = [5, 1, 0, 0, 0, 0, 0, 5];
+    var hyp_lvlList = [0, 0, 0, 0, 0, 0, 0, 0];
+    var uni_lvlList = [5, 1, 0, 0, 0, 0, 0, 5];
     //초기 스탯, 보댐은 일단은 0부터 시작. 동일 효율 계산이라 지장 없음.
     var statList = [cur_mainStatPure*(100+cur_mainStatPer)/100+cur_mainStatAbs, cur_subStatPure*(100+cur_subStatPer)/100+cur_subStatAbs, cur_criProb, cur_criDamage, cur_armorIgnore, cur_damageSum, 0, cur_attPower];
     var mainStatPer = cur_mainStatPer;
@@ -67,15 +67,15 @@ export function optimizeHyperUnion(cur_mainStatPure:number,
         switch(i) {
           //주스탯 효율 계산
           case 0:
-          hyp_after = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]+1]+uni_lvlList[i]*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+cur_subStatPer)/100);
-          uni_after = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]]+(uni_lvlList[i]+1)*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+cur_subStatPer)/100);
-          before = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]]+uni_lvlList[i]*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+cur_subStatPer)/100);
+          hyp_after = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]+1]+uni_lvlList[i]*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+subStatPer)/100);
+          uni_after = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]]+(uni_lvlList[i]+1)*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+subStatPer)/100);
+          before = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]]+uni_lvlList[i]*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+subStatPer)/100);
           break;
           //부스탯 효율 계산
           case 1:
-          hyp_after = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]+1]+uni_lvlList[i]*5*(100+cur_subStatPer)/100);
-          uni_after = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]]+(uni_lvlList[i]+1)*5*(100+cur_subStatPer)/100);
-          before = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]]+uni_lvlList[i]*5*(100+cur_subStatPer)/100);
+          hyp_after = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]+1]+uni_lvlList[i]*5*(100+subStatPer)/100);
+          uni_after = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]]+(uni_lvlList[i]+1)*5*(100+subStatPer)/100);
+          before = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]]+uni_lvlList[i]*5*(100+subStatPer)/100);
           break;
           //크리율 효율 계산
           case 2:
