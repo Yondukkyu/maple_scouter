@@ -25,22 +25,30 @@
             </mat-form-field>
         </div>
 
-        <div>
+        <div *ngIf="auxiliary_table_list[0] == 2">
+            <mat-form-field class="w-120">      
+                <mat-label> 재사용 수치 </mat-label>
+                <input
+                  type="number"
+                  matInput
+                  [(ngModel)]="auxiliary_table[1]"
+                  appSelectOnFocus
+                />
+            </mat-form-field>
+        </div>
+        <div *ngIf="auxiliary_table_list[0] == 3">
             <mat-form-field class="w-120">          
                 <mat-label> 어빌리티 </mat-label>
                 <mat-select [(ngModel)]="auxiliary_table[1]">
-                    <mat-option [value]="0">보공</mat-option>
-                    <mat-option [value]="1">벞지</mat-option>
-                    <mat-option [value]="2">재사용</mat-option>
                     <mat-option [value]="3">패시브1렙</mat-option>
-                    <mat-option [value]="4">해당 없음</mat-option>
+                    <mat-option [value]="0">해당 없음</mat-option>
                   </mat-select>
             </mat-form-field>
         </div>
         <div *ngIf="auxiliary_table_list[1] != 0">
             <mat-form-field class="w-120">          
                 <mat-label> 쿨감 </mat-label>
-                <mat-select [(ngModel)]="auxiliary_table[1]">
+                <mat-select [(ngModel)]="auxiliary_table[2]">
                     <mat-option [value]="0">없음</mat-option>
                     <mat-option [value]="1">1초</mat-option>
                     <mat-option [value]="2">2초</mat-option>
@@ -58,7 +66,7 @@
                 <input
                   type="number"
                   matInput
-                  [(ngModel)]="auxiliary_table[2]"
+                  [(ngModel)]="auxiliary_table[3]"
                   appSelectOnFocus
                 />
             </mat-form-field>
@@ -69,7 +77,7 @@
                 <input
                   type="number"
                   matInput
-                  [(ngModel)]="auxiliary_table[3]"
+                  [(ngModel)]="auxiliary_table[4]"
                   appSelectOnFocus
                 />
             </mat-form-field>
