@@ -1,1 +1,76 @@
-<p>link-table works!</p>
+<mat-card>
+    <mat-card-subtitle>사용 링크 정보 입력</mat-card-subtitle>
+    <mat-card-content>
+        <div>
+            <mat-form-field class="w-120">          
+                <mat-label> 모법 </mat-label>
+                <mat-select [(ngModel)]="link_table[0]">
+                    <mat-option [value]="0">0렙</mat-option>
+                    <mat-option [value]="1">1렙</mat-option>
+                    <mat-option [value]="2">2렙</mat-option>
+                    <mat-option [value]="3">3렙</mat-option>
+                    <mat-option [value]="4">4렙</mat-option>
+                    <mat-option [value]="5">5렙</mat-option>
+                    <mat-option [value]="6">6렙</mat-option>
+                  </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field class="w-120">          
+                <mat-label> 모도 </mat-label>
+                <mat-select [(ngModel)]="link_table[1]">
+                    <mat-option [value]="0">0렙</mat-option>
+                    <mat-option [value]="1">1렙</mat-option>
+                    <mat-option [value]="2">2렙</mat-option>
+                    <mat-option [value]="3">3렙</mat-option>
+                    <mat-option [value]="4">4렙</mat-option>
+                    <mat-option [value]="5">5렙</mat-option>
+                    <mat-option [value]="6">6렙</mat-option>
+                  </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field class="w-120">          
+                <mat-label> 카데나 </mat-label>
+                <mat-select [(ngModel)]="link_table[2]">
+                    <mat-option [value]="0">0렙</mat-option>
+                    <mat-option [value]="1">1렙</mat-option>
+                    <mat-option [value]="2">2렙</mat-option>
+                  </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field class="w-120">          
+                <mat-label> 아크 </mat-label>
+                <mat-select [(ngModel)]="link_table[3]">
+                    <mat-option [value]="0">0렙</mat-option>
+                    <mat-option [value]="1">1렙</mat-option>
+                    <mat-option [value]="2">2렙</mat-option>
+                  </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field class="w-120">          
+                <mat-label> 카인 </mat-label>
+                <mat-select [(ngModel)]="link_table[4]">
+                    <mat-option [value]="0">0렙</mat-option>
+                    <mat-option [value]="1">1렙</mat-option>
+                    <mat-option [value]="2">2렙</mat-option>
+                  </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field class="w-120">          
+                <mat-label> 일리움 </mat-label>
+                <mat-select [(ngModel)]="link_table[5]">
+                    <mat-option [value]="0">0렙</mat-option>
+                    <mat-option [value]="1">1렙</mat-option>
+                    <mat-option [value]="2">2렙</mat-option>
+                  </mat-select>
+            </mat-form-field>
+        </div>
+
+        
+        
+    </mat-card-content>
+</mat-card>
