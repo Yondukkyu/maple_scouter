@@ -28,13 +28,16 @@ export class ScouterComponent implements OnInit {
   progress = 0;
 
   stat_table :number[] = [];
-  link_table :number[] = [];
+  link_table :number[] = [6,6,2,2,2,0];
   equip_table :number[] = [];
   auxiliary_table :number[] = [];
   core_table :number[] = [];
 
   stat_table_list :string[]=statListDefault;
   equip_table_list :string[]=equipListDefault;
+  auxiliary_table_list : number[]  = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
+
+
 
 
   constructor(
@@ -97,7 +100,8 @@ export class ScouterComponent implements OnInit {
       this.equip_table_list = equipListDefault;
     }
 
-
+    //어빌, 쿨, 벞지, 크리인
+    this.auxiliary_table_list = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
 
 
   }
