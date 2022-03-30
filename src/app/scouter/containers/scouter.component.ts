@@ -7,7 +7,8 @@ import { Title } from '@angular/platform-browser';
 
 
 import { jobNames, jobs } from 'src/app/data/job_data';
-import { TemplateJobData } from 'src/app/data/data_format';
+import { TemplateData, TemplateJobData } from 'src/app/data/data_format';
+import { equipLevel, grades } from 'src/app/data/equip_data';
 
 @Component({
   selector: 'app-container',
@@ -16,11 +17,50 @@ import { TemplateJobData } from 'src/app/data/data_format';
 })
 export class ScouterComponent implements OnInit {
 
+  job_names = jobs;
+  grade_names = grades;
+  equip_levels = equipLevel;
+
   jobName:jobNames = '나이트로드';
   jobdata:TemplateJobData = new TemplateJobData(this.jobName);
+  monster_guard:number = 300;
+  jobTemplateData:TemplateData[] = [new TemplateData(grades[0],this.jobdata,this.monster_guard),
+                                    new TemplateData(grades[1],this.jobdata,this.monster_guard),
+                                    new TemplateData(grades[2],this.jobdata,this.monster_guard),
+                                    new TemplateData(grades[3],this.jobdata,this.monster_guard),
+                                    new TemplateData(grades[4],this.jobdata,this.monster_guard),
+                                    new TemplateData(grades[5],this.jobdata,this.monster_guard),
+                                    new TemplateData(grades[6],this.jobdata,this.monster_guard),
+                                    new TemplateData(grades[8],this.jobdata,this.monster_guard),
+                                    new TemplateData(grades[10],this.jobdata,this.monster_guard),
+                                    new TemplateData(grades[11],this.jobdata,this.monster_guard),
+                                    new TemplateData(grades[12],this.jobdata,this.monster_guard)];
+
+  job100dmgarr:number[]=[this.jobTemplateData[0].calc100dmg(),
+                        this.jobTemplateData[1].calc100dmg(),
+                        this.jobTemplateData[2].calc100dmg(),
+                        this.jobTemplateData[3].calc100dmg(),
+                        this.jobTemplateData[4].calc100dmg(),
+                        this.jobTemplateData[5].calc100dmg(),
+                        this.jobTemplateData[6].calc100dmg(),
+                        this.jobTemplateData[7].calc100dmg(),
+                        this.jobTemplateData[8].calc100dmg(),
+                        this.jobTemplateData[9].calc100dmg(),
+                        this.jobTemplateData[10].calc100dmg()];
+  jobMainstatarr:number[]=[this.jobTemplateData[0].calcMainStat(),
+                        this.jobTemplateData[1].calcMainStat(),
+                        this.jobTemplateData[2].calcMainStat(),
+                        this.jobTemplateData[3].calcMainStat(),
+                        this.jobTemplateData[4].calcMainStat(),
+                        this.jobTemplateData[5].calcMainStat(),
+                        this.jobTemplateData[6].calcMainStat(),
+                        this.jobTemplateData[7].calcMainStat(),
+                        this.jobTemplateData[8].calcMainStat(),
+                        this.jobTemplateData[9].calcMainStat(),
+                        this.jobTemplateData[10].calcMainStat()];
 
 
-  job_names = jobs;
+
   
 
   worker!: Worker;
@@ -68,16 +108,16 @@ export class ScouterComponent implements OnInit {
   {
     this.jobdata = new TemplateJobData(this.jobName);
 
-    // if(this.jobName =='제논')
+    // if(this.jobdata.jobStatType_ == 2)
     // {
     //   this.stat_table_list = statListXenon;
     // }
-    // else if(this.jobName =='데몬어벤져')
+    // else if(this.jobdata.jobStatType_ == 3)
     // {
     //   this.stat_table_list = statListDemonavenger;
     // }
     // else
-    if((this.jobName =='듀얼블레이드')||(this.jobName =='섀도어')||(this.jobName =='카데나'))
+    if(this.jobdata.jobStatType_ == 1)
     {
       this.stat_table_list = statListTwosub;
     }
@@ -87,11 +127,11 @@ export class ScouterComponent implements OnInit {
     }
 
 
-     // if(this.jobName =='제논')
+     // if(this.jobdata.jobStatType_ == 2)
     // {
     //   this.stat_table_list = statListXenon;
     // }
-    // else if(this.jobName =='데몬어벤져')
+    // else if(this.jobdata.jobStatType_ == 3)
     // {
     //   this.stat_table_list = statListDemonavenger;
     // }
@@ -102,7 +142,39 @@ export class ScouterComponent implements OnInit {
 
     //어빌, 쿨, 벞지, 크리인
     this.auxiliary_table_list = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
-
+    this.jobTemplateData = [new TemplateData(grades[0],this.jobdata,this.monster_guard),
+    new TemplateData(grades[1],this.jobdata,this.monster_guard),
+    new TemplateData(grades[2],this.jobdata,this.monster_guard),
+    new TemplateData(grades[3],this.jobdata,this.monster_guard),
+    new TemplateData(grades[4],this.jobdata,this.monster_guard),
+    new TemplateData(grades[5],this.jobdata,this.monster_guard),
+    new TemplateData(grades[6],this.jobdata,this.monster_guard),
+    new TemplateData(grades[8],this.jobdata,this.monster_guard),
+    new TemplateData(grades[10],this.jobdata,this.monster_guard),
+    new TemplateData(grades[11],this.jobdata,this.monster_guard),
+    new TemplateData(grades[12],this.jobdata,this.monster_guard)];
+    this.job100dmgarr=[this.jobTemplateData[0].calc100dmg(),
+                        this.jobTemplateData[1].calc100dmg(),
+                        this.jobTemplateData[2].calc100dmg(),
+                        this.jobTemplateData[3].calc100dmg(),
+                        this.jobTemplateData[4].calc100dmg(),
+                        this.jobTemplateData[5].calc100dmg(),
+                        this.jobTemplateData[6].calc100dmg(),
+                        this.jobTemplateData[7].calc100dmg(),
+                        this.jobTemplateData[8].calc100dmg(),
+                        this.jobTemplateData[9].calc100dmg(),
+                        this.jobTemplateData[10].calc100dmg()];
+   this.jobMainstatarr=[this.jobTemplateData[0].calcMainStat(),
+                        this.jobTemplateData[1].calcMainStat(),
+                        this.jobTemplateData[2].calcMainStat(),
+                        this.jobTemplateData[3].calcMainStat(),
+                        this.jobTemplateData[4].calcMainStat(),
+                        this.jobTemplateData[5].calcMainStat(),
+                        this.jobTemplateData[6].calcMainStat(),
+                        this.jobTemplateData[7].calcMainStat(),
+                        this.jobTemplateData[8].calcMainStat(),
+                        this.jobTemplateData[9].calcMainStat(),
+                        this.jobTemplateData[10].calcMainStat()];
 
   }
 
