@@ -8,7 +8,7 @@ import { Title } from '@angular/platform-browser';
 
 import { jobNames, jobs } from 'src/app/data/job_data';
 import { TemplateData, TemplateJobData } from 'src/app/data/data_format';
-import { equipLevel, grades } from 'src/app/data/equip_data';
+import { equipLevel, grades, templategrades } from 'src/app/data/equip_data';
 
 @Component({
   selector: 'app-container',
@@ -20,21 +20,16 @@ export class ScouterComponent implements OnInit {
   job_names = jobs;
   grade_names = grades;
   equip_levels = equipLevel;
+  template_grades = templategrades;
 
   jobName:jobNames = '나이트로드';
   jobdata:TemplateJobData = new TemplateJobData(this.jobName);
   monster_guard:number = 300;
-  jobTemplateData:TemplateData[] = [new TemplateData(grades[0],this.jobdata,this.monster_guard),
-                                    new TemplateData(grades[1],this.jobdata,this.monster_guard),
-                                    new TemplateData(grades[2],this.jobdata,this.monster_guard),
-                                    new TemplateData(grades[3],this.jobdata,this.monster_guard),
-                                    new TemplateData(grades[4],this.jobdata,this.monster_guard),
-                                    new TemplateData(grades[5],this.jobdata,this.monster_guard),
-                                    new TemplateData(grades[6],this.jobdata,this.monster_guard),
-                                    new TemplateData(grades[8],this.jobdata,this.monster_guard),
-                                    new TemplateData(grades[10],this.jobdata,this.monster_guard),
-                                    new TemplateData(grades[11],this.jobdata,this.monster_guard),
-                                    new TemplateData(grades[12],this.jobdata,this.monster_guard)];
+
+  jobTemplateData:TemplateData[] = []; 
+  
+  
+  
 
   job100dmgarr:number[]=[this.jobTemplateData[0].calc100dmg(),
                         this.jobTemplateData[1].calc100dmg(),
@@ -87,6 +82,16 @@ export class ScouterComponent implements OnInit {
     this.titleService.setTitle(
       'MapleScouter - 환산 스탯 계산'
     );
+
+    for (var ii = 0; ii<templategrades.length; ii++)
+    {
+  
+      this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard);
+    }
+  
+
+
+
   }
 
 
