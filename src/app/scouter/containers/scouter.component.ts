@@ -65,7 +65,7 @@ export class ScouterComponent implements OnInit {
   stat_table :number[] = [];
   link_table :number[] = [6,6,2,2,2,0];
   equip_table :number[] = [];
-  auxiliary_table :number[] = [];
+  auxiliary_table :number[] = [0,0,0,0,0];
   core_table :number[] = [];
 
   stat_table_list :string[]=statListDefault;
