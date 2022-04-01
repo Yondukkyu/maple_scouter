@@ -9,15 +9,35 @@ export const grades: string[] =
     '18유닠둘둘',
     '반레전둘둘',
     '레전둘둘',
-    '챙미니',
     '해방 초고스펙',
+    '5칠흑 2여명',
+    '9칠흑 2여명',
+    '현실적 이론끝',
+    '챙미니',
     '욘두뀨',
+]
+
+export type gradeNames = typeof grades[number];
+
+export const templategrades: string[] =
+[
+    '버닝메린이',
+    '에픽둘둘',
+    '에픽+둘둘',
+    '유닠둘둘',
+    '18유닠둘둘',
+    '반레전둘둘',
+    '레전둘둘',
+    '해방 초고스펙',
     '5칠흑 2여명',
     '9칠흑 2여명',
     '현실적 이론끝',
 ]
 
-export type gradeNames = typeof grades[number];
+export type templategradeNames = typeof templategrades[number];
+
+
+
 
 
 // 장비 수준에 따른 레벨, 유니온 데이터 (레벨, 하이퍼 칸수, 유니온 블럭수)
