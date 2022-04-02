@@ -43,7 +43,7 @@ export const jobs: string[] =
     '플레임위자드',
     '호영',
     '히어로',
-   
+    '제논',
 ]
 
 
