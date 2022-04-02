@@ -758,7 +758,7 @@ export const jobSubweaptype : Record<jobNames, number> =
 '호영': 0,
 '히어로': 0,
 '제논': 0,
-'데몬어벤져': 1,
+'데몬어벤져': 0,
 }
 
 // 직업링크 어빌 정보(0:보공 1:벞지 2:재사용 3:패시브1렙) 수정
