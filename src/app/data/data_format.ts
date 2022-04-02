@@ -33,102 +33,43 @@ import {jobNames,
 
 export class UserStatdata
 {
+    jobInfo:jobNames;
+    doping_data:TemplateStatdata;
 
-    main_stat_pure: number;
-    main_stat_rate: number;
-    main_stat_abs: number;
-    sub_stat1_pure: number;
-    sub_stat1_rate: number;
-    sub_stat1_abs: number;
-    sub_stat2_pure: number;
-    sub_stat2_rate: number;
-    sub_stat2_abs: number;
-    att_mag: number;
-    att_mag_rate: number;
-    dmg: number;
-    boss_dmg: number;
-    final_dmg: number;
-    ign_dmg: number;
-    cri_rate: number;
-    cri_dmg: number;
+    server:number;
+    level:number;
+    //stat_w_hero:number;
+    //stat_wo_hero:number;
 
-    constructor(statinfo:number[])
+    
+
+    constructor(jobData:TemplateJobData, statData:number[], equipData:number[], auxiliaryData:number[],linkData:number[])
     {
-        this.main_stat_pure = statinfo[0];
-        this.main_stat_rate = statinfo[1];
-        this.main_stat_abs = statinfo[2];
-        this.sub_stat1_pure = statinfo[3];
-        this.sub_stat1_rate = statinfo[4];
-        this.sub_stat1_abs = statinfo[5];
-        this.sub_stat2_pure = statinfo[6];
-        this.sub_stat2_rate = statinfo[7];
-        this.sub_stat2_abs = statinfo[8];
-        this.att_mag = statinfo[9];
-        this.att_mag_rate = statinfo[10];
-        this.dmg = statinfo[11];
-        this.boss_dmg = statinfo[12];
-        this.final_dmg = statinfo[13];
-        this.ign_dmg = statinfo[14];
-        this.cri_rate = statinfo[15];
-        this.cri_dmg = statinfo[16];
+        this.jobInfo = jobData.jobName_;
+        this.doping_data = jobData.doping_;
+
+        this.server = statData[0];
+        this.level = statData[1];
+
+
+
+
+
+
+
+
+
+
+
+        
         
     }
-
-
-    add_stat(to_add:UserStatdata)
-    {
-        
-
-        this.main_stat_pure += to_add.main_stat_pure;
-        this.main_stat_rate += to_add.main_stat_rate;
-        this.main_stat_abs += to_add.main_stat_abs;
-        this.sub_stat1_pure += to_add.sub_stat1_pure;
-        this.sub_stat1_rate += to_add.sub_stat1_rate;
-        this.sub_stat1_abs += to_add.sub_stat1_abs;
-        this.sub_stat2_pure += to_add.sub_stat2_pure;
-        this.sub_stat2_rate += to_add.sub_stat2_rate;
-        this.sub_stat2_abs += to_add.sub_stat2_abs;
-        this.att_mag += to_add.att_mag;
-        this.att_mag_rate += to_add.att_mag_rate;
-        this.dmg += to_add.dmg;
-        this.boss_dmg += to_add.boss_dmg;
-        this.final_dmg = (this.final_dmg * 0.01 + 1) * (to_add.final_dmg * 0.01 + 1) * 100 -100;
-        this.ign_dmg = (1 - (1 - this.ign_dmg * 0.01) * (1 - to_add.ign_dmg * 0.01)) * 100;
-        this.cri_rate += to_add.cri_rate;
-        this.cri_dmg += to_add.cri_dmg;
-
-    }
-
-    sub_stat(to_sub:UserStatdata)
-    {
-        
-
-        this.main_stat_pure -= to_sub.main_stat_pure;
-        this.main_stat_rate -= to_sub.main_stat_rate;
-        this.main_stat_abs -= to_sub.main_stat_abs;
-        this.sub_stat1_pure -= to_sub.sub_stat1_pure;
-        this.sub_stat1_rate -= to_sub.sub_stat1_rate;
-        this.sub_stat1_abs -= to_sub.sub_stat1_abs;
-        this.sub_stat2_pure -= to_sub.sub_stat2_pure;
-        this.sub_stat2_rate -= to_sub.sub_stat2_rate;
-        this.sub_stat2_abs -= to_sub.sub_stat2_abs;
-        this.att_mag -= to_sub.att_mag;
-        this.att_mag_rate -= to_sub.att_mag_rate;
-        this.dmg -= to_sub.dmg;
-        this.boss_dmg -= to_sub.boss_dmg;
-        this.final_dmg = (this.final_dmg * 0.01 + 1) / (to_sub.final_dmg * 0.01 + 1) * 100 -100;
-        this.ign_dmg = (this.ign_dmg - to_sub.ign_dmg) / (1 - to_sub.ign_dmg * 0.01);
-        this.cri_rate -= to_sub.cri_rate;
-        this.cri_dmg -= to_sub.cri_dmg;
-
-    }
-
-
 }
 
 export class TemplateStatdata
 {
     stat_raw_data:number[] = [];
+    current_data:number[] = [];
 
     main_stat_pure: number = 0;
     main_stat_rate: number = 0;
@@ -170,7 +111,28 @@ export class TemplateStatdata
         this.ign_dmg = this.stat_raw_data[11];
         this.cri_rate = this.stat_raw_data[12];
         this.cri_dmg = this.stat_raw_data[13];
+
         
+        
+    }
+
+    update()
+    {
+        this.current_data[0] = this.main_stat_pure;
+        this.current_data[1] = this.main_stat_rate;
+        this.current_data[2] = this.main_stat_abs;
+        this.current_data[3] = this.sub_stat_pure;
+        this.current_data[4] = this.sub_stat_rate;
+        this.current_data[5] = this.sub_stat_abs;
+        this.current_data[6] = this.att_mag;
+        this.current_data[7] = this.att_mag_rate;
+        this.current_data[8] = this.dmg;
+        this.current_data[9] = this.boss_dmg;
+        this.current_data[10] = this.final_dmg;
+        this.current_data[11] = this.ign_dmg;
+        this.current_data[12] = this.cri_rate;
+        this.current_data[13] = this.cri_dmg;
+
     }
 
 
@@ -197,8 +159,6 @@ export class TemplateStatdata
 
     sub_stat(to_sub:TemplateStatdata)
     {
-        
-
         this.main_stat_pure -= to_sub.main_stat_pure;
         this.main_stat_rate -= to_sub.main_stat_rate;
         this.main_stat_abs -= to_sub.main_stat_abs;
@@ -217,29 +177,21 @@ export class TemplateStatdata
     }
 
     deep_copy()
+    {   
+        this.update();
+
+        return new TemplateStatdata(this.current_data);
+    }
+
+    calc_main_stat():number
     {
-        var current_data = [];
+        
+        return Math.floor(this.main_stat_pure * (this.main_stat_rate/100 + 1)) + this.main_stat_abs;
 
-        current_data[0] = this.main_stat_pure;
-        current_data[1] = this.main_stat_rate;
-        current_data[2] = this.main_stat_abs;
-        current_data[3] = this.sub_stat_pure;
-        current_data[4] = this.sub_stat_rate;
-        current_data[5] = this.sub_stat_abs;
-        current_data[6] = this.att_mag;
-        current_data[7] = this.att_mag_rate;
-        current_data[8] = this.dmg;
-        current_data[9] = this.boss_dmg;
-        current_data[10] = this.final_dmg;
-        current_data[11] = this.ign_dmg;
-        current_data[12] = this.cri_rate;
-        current_data[13] = this.cri_dmg;
-
-
-        return new TemplateStatdata(current_data);
     }
 
 
+    
 }
 
 export class TemplateJobData
@@ -431,7 +383,7 @@ export class TemplateData
 
     calcMainStat():number
     {
-        return Math.floor(this.totalStat_.main_stat_pure * (this.totalStat_.main_stat_rate/100 + 1)) + this.totalStat_.main_stat_abs;
+       return this.totalStat_.calc_main_stat();
     }
 
     calc100dmg():number
@@ -444,8 +396,9 @@ export class TemplateData
         var final_coeff = (100 + this.totalStat_.final_dmg) / 100;
         var ign_coeff = Math.max(0, 1 - this.monster_gaurd_rate / 100 * (1-this.totalStat_.ign_dmg / 100));
         var cri_coeff = Math.min(this.totalStat_.cri_rate,100)/100 * (0.35 + this.totalStat_.cri_dmg/100) + 1;
-
         
+
+
         return Math.floor(prof_coeff * weap_coeff * stat_coeff * att_coeff * dmg_coeff * final_coeff * ign_coeff * cri_coeff);
     }
 

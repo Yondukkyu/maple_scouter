@@ -26,49 +26,26 @@ export class ScouterComponent implements OnInit {
   jobdata:TemplateJobData = new TemplateJobData(this.jobName);
   monster_guard:number = 300;
 
-  jobTemplateData:TemplateData[] = []; 
-  
-  
-  
-
-  job100dmgarr:number[]=[this.jobTemplateData[0].calc100dmg(),
-                        this.jobTemplateData[1].calc100dmg(),
-                        this.jobTemplateData[2].calc100dmg(),
-                        this.jobTemplateData[3].calc100dmg(),
-                        this.jobTemplateData[4].calc100dmg(),
-                        this.jobTemplateData[5].calc100dmg(),
-                        this.jobTemplateData[6].calc100dmg(),
-                        this.jobTemplateData[7].calc100dmg(),
-                        this.jobTemplateData[8].calc100dmg(),
-                        this.jobTemplateData[9].calc100dmg(),
-                        this.jobTemplateData[10].calc100dmg()];
-  jobMainstatarr:number[]=[this.jobTemplateData[0].calcMainStat(),
-                        this.jobTemplateData[1].calcMainStat(),
-                        this.jobTemplateData[2].calcMainStat(),
-                        this.jobTemplateData[3].calcMainStat(),
-                        this.jobTemplateData[4].calcMainStat(),
-                        this.jobTemplateData[5].calcMainStat(),
-                        this.jobTemplateData[6].calcMainStat(),
-                        this.jobTemplateData[7].calcMainStat(),
-                        this.jobTemplateData[8].calcMainStat(),
-                        this.jobTemplateData[9].calcMainStat(),
-                        this.jobTemplateData[10].calcMainStat()];
-
-
+  jobTemplateData:TemplateData[] = [];
+  job100dmgarr:number[]=[];
+  jobMainstatarr:number[]=[];
 
   
+ 
 
   worker!: Worker;
   isLoading = false;
   progress = 0;
 
-  stat_table :number[] = [];
+  stat_table_front :number[] = [];
+  stat_table_back :number[] = [];
   link_table :number[] = [6,6,2,2,2,0];
   equip_table :number[] = [];
   auxiliary_table :number[] = [0,0,0,0,0];
   core_table :number[] = [];
 
   stat_table_list :string[]=statListDefault;
+  stat_table : string[] = statListCommon;
   equip_table_list :string[]=equipListDefault;
   auxiliary_table_list : number[]  = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
 
@@ -82,16 +59,12 @@ export class ScouterComponent implements OnInit {
     this.titleService.setTitle(
       'MapleScouter - 환산 스탯 계산'
     );
-
     for (var ii = 0; ii<templategrades.length; ii++)
     {
-  
       this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard);
+      this.jobMainstatarr[ii]=this.jobTemplateData[ii].calcMainStat();
+      this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();
     }
-  
-
-
-
   }
 
 
@@ -113,16 +86,16 @@ export class ScouterComponent implements OnInit {
   {
     this.jobdata = new TemplateJobData(this.jobName);
 
-    // if(this.jobdata.jobStatType_ == 2)
+    // if(this.jobName =='제논')
     // {
     //   this.stat_table_list = statListXenon;
     // }
-    // else if(this.jobdata.jobStatType_ == 3)
+    // else if(this.jobName =='데몬어벤져')
     // {
     //   this.stat_table_list = statListDemonavenger;
     // }
     // else
-    if(this.jobdata.jobStatType_ == 1)
+    if((this.jobName =='듀얼블레이드')||(this.jobName =='섀도어')||(this.jobName =='카데나'))
     {
       this.stat_table_list = statListTwosub;
     }
@@ -132,11 +105,11 @@ export class ScouterComponent implements OnInit {
     }
 
 
-     // if(this.jobdata.jobStatType_ == 2)
+     // if(this.jobName =='제논')
     // {
     //   this.stat_table_list = statListXenon;
     // }
-    // else if(this.jobdata.jobStatType_ == 3)
+    // else if(this.jobName =='데몬어벤져')
     // {
     //   this.stat_table_list = statListDemonavenger;
     // }
@@ -144,49 +117,21 @@ export class ScouterComponent implements OnInit {
     {
       this.equip_table_list = equipListDefault;
     }
+    for (var ii = 0; ii<templategrades.length; ii++)
+    {
+      this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard);
+      this.jobMainstatarr[ii]=this.jobTemplateData[ii].calcMainStat();
+      this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();
+    }
 
     //어빌, 쿨, 벞지, 크리인
     this.auxiliary_table_list = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
-    this.jobTemplateData = [new TemplateData(grades[0],this.jobdata,this.monster_guard),
-    new TemplateData(grades[1],this.jobdata,this.monster_guard),
-    new TemplateData(grades[2],this.jobdata,this.monster_guard),
-    new TemplateData(grades[3],this.jobdata,this.monster_guard),
-    new TemplateData(grades[4],this.jobdata,this.monster_guard),
-    new TemplateData(grades[5],this.jobdata,this.monster_guard),
-    new TemplateData(grades[6],this.jobdata,this.monster_guard),
-    new TemplateData(grades[8],this.jobdata,this.monster_guard),
-    new TemplateData(grades[10],this.jobdata,this.monster_guard),
-    new TemplateData(grades[11],this.jobdata,this.monster_guard),
-    new TemplateData(grades[12],this.jobdata,this.monster_guard)];
-    this.job100dmgarr=[this.jobTemplateData[0].calc100dmg(),
-                        this.jobTemplateData[1].calc100dmg(),
-                        this.jobTemplateData[2].calc100dmg(),
-                        this.jobTemplateData[3].calc100dmg(),
-                        this.jobTemplateData[4].calc100dmg(),
-                        this.jobTemplateData[5].calc100dmg(),
-                        this.jobTemplateData[6].calc100dmg(),
-                        this.jobTemplateData[7].calc100dmg(),
-                        this.jobTemplateData[8].calc100dmg(),
-                        this.jobTemplateData[9].calc100dmg(),
-                        this.jobTemplateData[10].calc100dmg()];
-   this.jobMainstatarr=[this.jobTemplateData[0].calcMainStat(),
-                        this.jobTemplateData[1].calcMainStat(),
-                        this.jobTemplateData[2].calcMainStat(),
-                        this.jobTemplateData[3].calcMainStat(),
-                        this.jobTemplateData[4].calcMainStat(),
-                        this.jobTemplateData[5].calcMainStat(),
-                        this.jobTemplateData[6].calcMainStat(),
-                        this.jobTemplateData[7].calcMainStat(),
-                        this.jobTemplateData[8].calcMainStat(),
-                        this.jobTemplateData[9].calcMainStat(),
-                        this.jobTemplateData[10].calcMainStat()];
+
 
   }
 
   
 }
-
-
 
 const statListDefault: string[] =
 [
@@ -194,11 +139,6 @@ const statListDefault: string[] =
     '메용 스탯(시드링 착용)',
     '메용X 스탯(시드링 착용)',
     '부스탯',
-    '스공(뒷스공)',
-    '데미지',
-    '보스 데미지(+어빌 상추뎀)',
-    '방무',
-    '쓸샾후 크뎀',
 ]
 
 const statListTwosub: string[] =
@@ -208,11 +148,6 @@ const statListTwosub: string[] =
     '메용X 스탯(시드링 착용)',
     '부스탯(DEX)',
     '부스탯2(STR)',
-    '스공(뒷스공)',
-    '데미지',
-    '보스 데미지(+어빌 상추뎀)',
-    '방무',
-    '쓸샾후 크뎀',
 ]
 
 const statListDemonavenger: string[] =
@@ -220,12 +155,7 @@ const statListDemonavenger: string[] =
     '레벨',
     '쓸뻥O HP(시드링 착용)',
     '쓸뻥X HP(시드링 착용)',
-    '부스탯',
-    '스공(뒷스공)',
-    '데미지',
-    '보스 데미지(+어빌 상추뎀)',
-    '방무',
-    '쓸샾후 크뎀',
+    '부스탯(STR)',
 ]
 
 const statListXenon: string[] =
@@ -237,14 +167,18 @@ const statListXenon: string[] =
     'STR 메용X 스탯(시드링 착용)',
     'DEX 메용X 스탯(시드링 착용)',
     'LUK 메용X 스탯(시드링 착용)',
+    
+]
+
+
+const statListCommon:string[] =
+[
+    '스공(뒷스공)',
     '데미지',
     '보스 데미지(+어빌 상추뎀)',
     '방무',
     '쓸샾후 크뎀',
 ]
-
-
-
 
 
 

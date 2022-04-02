@@ -34,8 +34,10 @@
   </div>
   <div class="layout">
     <app-stat-table
-      [stat_table]="stat_table"
+      [stat_table_front]="stat_table_front"
+      [stat_table_back]="stat_table_back"
       [stat_table_list]="stat_table_list"
+      [stat_table]="stat_table"
     >
     </app-stat-table>
     <app-equip-table
@@ -47,7 +49,6 @@
       [auxiliary_table] = "auxiliary_table"
       [auxiliary_table_list] = "auxiliary_table_list"
     >
-
     </app-auxiliary-table>
     <app-link-table
       [link_table]="link_table"
@@ -55,11 +56,12 @@
     </app-link-table>
   </div>
   <div>
-    <p> {{jobMainstatarr}} </p>
+    {{jobMainstatarr}}
   </div>
   <div>
-    <p> {{job100dmgarr}} </p>
+    {{job100dmgarr}}
   </div>
+  
   
 
 

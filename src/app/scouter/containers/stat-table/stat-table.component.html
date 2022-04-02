@@ -4,7 +4,7 @@
         <div>
             <mat-form-field class="w-192">          
                 <mat-label> 서버 </mat-label>
-                <mat-select [(ngModel)]="stat_table[0]">
+                <mat-select [(ngModel)]="stat_table_front[0]">
                     <mat-option [value]="0">본섭</mat-option>
                     <mat-option [value]="1">리부트</mat-option>
                   </mat-select>
@@ -16,7 +16,18 @@
                 <input
                   type="number"
                   matInput
-                  [(ngModel)]="stat_table[i+1]"
+                  [(ngModel)]="stat_table_front[i+1]"
+                  appSelectOnFocus
+                />
+            </mat-form-field>
+        </div>
+        <div *ngFor="let list of stat_table; let i = index">
+            <mat-form-field class="w-192">      
+                <mat-label> {{list}} </mat-label>
+                <input
+                  type="number"
+                  matInput
+                  [(ngModel)]="stat_table_back[i+1]"
                   appSelectOnFocus
                 />
             </mat-form-field>
