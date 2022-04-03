@@ -133,7 +133,7 @@ export const equipLevel_xenon: Record<gradeNames, number[]> =
 // 템값_데벤져
 export const equipLevel_demon: Record<gradeNames, number[]> =
 {
-    '버닝메린이': [58152, 39, 0, 806, 0, 0, 503, 9, 2, 80, , 40.786975, 0, 0],
+    '버닝메린이': [58152, 39, 0, 806, 0, 0, 503, 9, 2, 80, 0, 40.786975, 0, 0],
     '에픽둘둘': [85525, 187, 151200, 1099, 0, 0, 1257, 54, 0, 155, 0, 70.98561775, 0, 0],
     '에픽+둘둘': [90883, 198, 252000, 1255, 0, 0, 1523, 60, 0, 220, 0, 71.577748, 0, 8],
     '유닠둘둘': [102096, 379, 277200, 1623, 0, 0, 1777, 87, 0, 220, 0, 71.577748, 0, 8],
@@ -313,7 +313,7 @@ export const equipCoreAdd_xenon: Record<gradeNames, number[]> =
 }
 
 //템값 추가값 데몬어벤져(블링크 로프 은월유뇬250)
-export const equipCoreAdd: Record<gradeNames, number[]> =
+export const equipCoreAdd_demon: Record<gradeNames, number[]> =
 {
     '버닝메린이': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     '에픽둘둘': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
