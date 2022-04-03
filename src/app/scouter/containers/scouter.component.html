@@ -59,8 +59,6 @@
         </div>
       </mat-card-content>
     </mat-card>
-  </div>
-  <div class="layout">
     <app-stat-table
       [stat_table_front]="stat_table_front"
       [stat_table_back]="stat_table_back"
@@ -84,7 +82,7 @@
     </app-link-table>
   </div>
   <div>
-    <mat-card>
+    <mat-card class="w-192">
       <mat-card-subtitle>환산 주스탯 정보</mat-card-subtitle>
       <mat-card-content>
         <button class="heading-button" (click)="calculate_user_stat()" mat-stroked-button>환산 주스탯 계산</button>
