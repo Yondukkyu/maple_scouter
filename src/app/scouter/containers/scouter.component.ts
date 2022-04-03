@@ -37,17 +37,18 @@ export class ScouterComponent implements OnInit {
   isLoading = false;
   progress = 0;
 
-  stat_table_front :number[] = [];
+  stat_table_front :number[] = [0,];
   stat_table_back :number[] = [];
   link_table :number[] = [6,6,2,2,2,0];
   equip_table :number[] = [];
   auxiliary_table :number[] = [0,0,0,0,0];
   core_table :number[] = [];
 
-  stat_table_list :string[]=statListDefault;
+  stat_table_list :string[]=[];
   stat_table : string[] = statListCommon;
-  equip_table_list :string[]=equipListDefault;
-  auxiliary_table_list : number[]  = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
+  equip_table_list :string[]=[];
+  auxiliary_table_list : number[]  = [];
+  final_dmg : number = 0;
 
 
 
@@ -59,12 +60,8 @@ export class ScouterComponent implements OnInit {
     this.titleService.setTitle(
       'MapleScouter - 환산 스탯 계산'
     );
-    for (var ii = 0; ii<templategrades.length; ii++)
-    {
-      this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard);
-      this.jobMainstatarr[ii]=this.jobTemplateData[ii].calcMainStat();
-      this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();
-    }
+
+    this.initializeJobValues();
   }
 
 
@@ -86,65 +83,61 @@ export class ScouterComponent implements OnInit {
   {
     this.jobdata = new TemplateJobData(this.jobName);
 
-    // if(this.jobName =='제논')
-    // {
-    //   this.stat_table_list = statListXenon;
-    // }
-    // else if(this.jobName =='데몬어벤져')
-    // {
-    //   this.stat_table_list = statListDemonavenger;
-    // }
-    // else
-    if((this.jobName =='듀얼블레이드')||(this.jobName =='섀도어')||(this.jobName =='카데나'))
+    if(this.jobdata.jobStatType_== 3)
+    {
+      this.stat_table_list = statListDemonavenger;
+      this.equip_table_list = equipListDemonavenger;
+    }
+    else if(this.jobdata.jobStatType_== 2)
+    {
+      this.stat_table_list = statListXenon;
+      this.equip_table_list = equipListXenon;
+    }
+    else if(this.jobdata.jobStatType_== 1)
     {
       this.stat_table_list = statListTwosub;
+      this.equip_table_list = equipListDefault;
     }
     else
     {
       this.stat_table_list = statListDefault;
-    }
-
-
-     // if(this.jobName =='제논')
-    // {
-    //   this.stat_table_list = statListXenon;
-    // }
-    // else if(this.jobName =='데몬어벤져')
-    // {
-    //   this.stat_table_list = statListDemonavenger;
-    // }
-    // else
-    {
       this.equip_table_list = equipListDefault;
     }
+
+     //어빌, 쿨, 벞지, 크리인
+    this.auxiliary_table_list = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
+     
+    console.log('');
     for (var ii = 0; ii<templategrades.length; ii++)
     {
       this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard);
       this.jobMainstatarr[ii]=this.jobTemplateData[ii].calcMainStat();
-      this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();
+      this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();   
     }
-
-    //어빌, 쿨, 벞지, 크리인
-    this.auxiliary_table_list = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
-
+     
+     console.log(this.jobMainstatarr);
+     console.log(this.job100dmgarr);
 
   }
+
+  // calculate_final_dmg()
+  // {
+  //   this.final_dmg = this.jobdata.statData_
+  // }
 
   
 }
 
 const statListDefault: string[] =
 [
-    '레벨',
-    '메용 스탯(시드링 착용)',
+    '메용O 스탯(시드링 착용)',
     '메용X 스탯(시드링 착용)',
     '부스탯',
 ]
 
 const statListTwosub: string[] =
 [
-    '레벨',
-    '메용 스탯(시드링 착용)',
+    '메용O 스탯(시드링 착용)',
     '메용X 스탯(시드링 착용)',
     '부스탯(DEX)',
     '부스탯2(STR)',
@@ -152,7 +145,6 @@ const statListTwosub: string[] =
 
 const statListDemonavenger: string[] =
 [
-    '레벨',
     '쓸뻥O HP(시드링 착용)',
     '쓸뻥X HP(시드링 착용)',
     '부스탯(STR)',
@@ -160,10 +152,9 @@ const statListDemonavenger: string[] =
 
 const statListXenon: string[] =
 [
-    '레벨',
-    'STR 메용 스탯(시드링 착용)',
-    'DEX 메용 스탯(시드링 착용)',
-    'LUK 메용 스탯(시드링 착용)',
+    'STR 메용O 스탯(시드링 착용)',
+    'DEX 메용O 스탯(시드링 착용)',
+    'LUK 메용O 스탯(시드링 착용)',
     'STR 메용X 스탯(시드링 착용)',
     'DEX 메용X 스탯(시드링 착용)',
     'LUK 메용X 스탯(시드링 착용)',
@@ -173,7 +164,7 @@ const statListXenon: string[] =
 
 const statListCommon:string[] =
 [
-    '스공(뒷스공)',
+    '스공(메용O, 뒷스공)',
     '데미지',
     '보스 데미지(+어빌 상추뎀)',
     '방무',

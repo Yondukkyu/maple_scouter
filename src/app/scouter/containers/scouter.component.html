@@ -56,12 +56,31 @@
     </app-link-table>
   </div>
   <div>
-    {{jobMainstatarr}}
+    <mat-card>
+      <mat-card-subtitle>직업 정보</mat-card-subtitle>
+      <mat-card-content>
+        <div>
+          <mat-label> 스탯창 기본 조건 </mat-label>
+          <h4 class="mat-h4">
+            {{jobName}}
+          </h4>
+          <mat-label> debug1 </mat-label>
+          <h4 class="mat-h4">
+            {{jobTemplateData[1].totalStat_.main_stat_pure}}
+          </h4>
+          <mat-label> debug2 </mat-label>
+          <h4 class="mat-h4">
+            {{jobTemplateData[1].totalStat_.main_stat_rate}}
+          </h4>  
+          <mat-label> debug3 </mat-label>
+          <h4 class="mat-h4">
+            {{jobTemplateData[1].totalStat_.main_stat_abs}}
+          </h4>  
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
-  <div>
-    {{job100dmgarr}}
-  </div>
-  
+
   
 
 
