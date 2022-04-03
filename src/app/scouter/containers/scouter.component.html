@@ -1,7 +1,7 @@
 <div class="container">
   <div class="flex-center">
     <h1 class="mat-h1">
-      환산 주스탯 계산
+      환산 주스탯 계산 (Beta, Ver 220423)
     </h1>
   </div>
   <div class="layout">
@@ -42,6 +42,7 @@
               />
           </mat-form-field>
       </div>
+     
         <div>
           <mat-label> 스탯창 기본 조건 </mat-label>
           <h4 class="mat-h4">
@@ -84,21 +85,14 @@
   </div>
   <div>
     <mat-card>
-      <mat-card-subtitle>직업 정보</mat-card-subtitle>
+      <mat-card-subtitle>환산 주스탯 정보</mat-card-subtitle>
       <mat-card-content>
+        <button class="heading-button" (click)="calculate_user_stat()" mat-stroked-button>환산 주스탯 계산</button>
         <div>
-          <mat-label> 스탯창 기본 조건 </mat-label>
-          <h4 class="mat-h4">
-            {{jobName}}
-          </h4>
-          <mat-label> debug2 </mat-label>
-          <h4 class="mat-h4">
-            {{jobTemplateData[1].totalStat_.main_stat_rate}}
-          </h4>  
-          <mat-label> debug3 </mat-label>
-          <h4 class="mat-h4">
-            {{jobTemplateData[1].totalStat_.main_stat_abs}}
-          </h4>  
+          <mat-label> 환산 주스탯 </mat-label>
+          <h1 class="mat-h1">
+            {{actual_stat}}
+          </h1>  
         </div>
       </mat-card-content>
     </mat-card>

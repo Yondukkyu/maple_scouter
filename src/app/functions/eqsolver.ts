@@ -75,13 +75,13 @@ class Complex {
     
     
     
-export function CubicSolver(a1:number, b1:number, c1:number, d1:number, dam1:number) {
+export function CubicSolver(line_data:number[], dam1:number) {
 
-        var a = b1/a1;
-        var b = c1/a1;
+        var a = line_data[2]/line_data[3];
+        var b = line_data[1]/line_data[3];
         var x1;
     
-        var c = (d1 - dam1)/a1;
+        var c = (line_data[0] - dam1)/line_data[3];
     
         var p = (-a*a/3.0 + b) / 3.0;
         var q = -(2.0*a*a*a/27.0 - a*b / 3.0 + c)/ 2.0;
@@ -126,7 +126,7 @@ export function CubicSolver(a1:number, b1:number, c1:number, d1:number, dam1:num
     
     
         
-      x1 = Math.floor(x1*10000);
+
     
     
       return x1;

@@ -1,6 +1,6 @@
-import { TemplateStatdata } from "../data/data_format";
+import { statData } from "../data/data_format";
 
-export function optimizeHyperUnion( statinfo:TemplateStatdata,
+export function optimizeHyperUnion( statinfo:statData,
                                     hyp_totalPoint:number,
                                     union_totalBlock:number,
                                     union_reserved:number,
@@ -197,5 +197,5 @@ export function optimizeHyperUnion( statinfo:TemplateStatdata,
     var actual_uni = [5 * uni_lvlList[0], 5 * uni_lvlList[1], uni_lvlList[2], 0.5*uni_lvlList[3], uni_lvlList[4], uni_lvlList[5], uni_lvlList[6], uni_lvlList[7]];
   
   
-    return new TemplateStatdata([actual_uni[0], 0 , actual_hyp[0], actual_uni[1], 0, actual_hyp[1], actual_uni[7]+actual_hyp[7], 0, actual_hyp[5], actual_hyp[6]+actual_uni[6],0,(1-(1-actual_hyp[4]/100)*(1-actual_uni[4]/100))*100,actual_hyp[2]+actual_uni[2], actual_hyp[3]+actual_uni[3]]);
+    return new statData([actual_uni[0], 0 , actual_hyp[0], actual_uni[1], 0, actual_hyp[1], actual_uni[7]+actual_hyp[7], 0, actual_hyp[5], actual_hyp[6]+actual_uni[6],0,(1-(1-actual_hyp[4]/100)*(1-actual_uni[4]/100))*100,actual_hyp[2]+actual_uni[2], actual_hyp[3]+actual_uni[3]]);
 }
