@@ -1,6 +1,7 @@
-import { iif } from "rxjs";
 import { optimizeHyperUnion } from "../functions/optimizer";
-import {equipAuxiliary, equipCoolComp, equipCoreAdd,
+import {equipAuxiliary,
+        equipCoolComp,
+        equipCoreAdd,
         equipFarm,
         equipjobWeapattComp,
         equipLevel,
@@ -32,119 +33,9 @@ import {jobNames,
         jobAddIGR,
 } from "./job_data";
 
-export class UserStatdata
-{
-    jobName:jobNames;
-    doping_data:TemplateStatdata;
-
-    server:number;
-    level:number;
-    stat_w_hero:number;
-    stat_wo_hero:number;
-    sub_stat:number;
-    stat_atk:number;
-    dmg:number;
-    boss_dmg:number;
-    ign_dmg:number;
-    cri_dmg:number;
-    att_mag_rate:number;
-    abs_stat:number;
-    auxiliary_data:number[];
-    link_dmg:number;
 
 
-    stat_list:number[]=[];
-
-
-    
-
-    constructor(jobData:TemplateJobData, statData_front:number[], statData_back:number[], equipData:number[], auxiliaryData:number[],linkData:number[])
-    {
-        this.jobName = jobData.jobName_;
-        this.doping_data = jobData.doping_;
-
-        this.server = statData_front[0];
-        this.level = statData_front[1];
-        this.stat_w_hero = 0;
-        this.stat_wo_hero = 0;
-        this.sub_stat = 0;
-
-        if(jobData.jobStatType_== 2) //제논
-        {
-            this.stat_w_hero = statData_front[2]+statData_front[3]+statData_front[4];
-            this.stat_wo_hero = statData_front[5]+statData_front[6]+statData_front[7];
-        }
-        else if(jobData.jobStatType_== 1) //이중 부스탯
-        {
-            this.stat_w_hero = statData_front[2];
-            this.stat_wo_hero = statData_front[3];
-            this.sub_stat = statData_front[4]+statData_front[5];
-        }
-        else
-        {
-            this.stat_w_hero = statData_front[2];
-            this.stat_wo_hero = statData_front[3];
-            this.sub_stat = statData_front[4];
-        }
-
-        this.stat_atk = statData_back[0];
-        this.dmg = statData_back[1];
-        this.boss_dmg = statData_back[2];
-        this.ign_dmg = statData_back[3];
-        this.cri_dmg = statData_back[4];
-
-        this.att_mag_rate = equipData[0]+jobData.statData_.att_mag_rate;
-        
-        this.abs_stat = 0;
-        for(var ii=1; ii < equipData.length; ii++)
-        {
-            this.abs_stat += equipData[ii];
-        }
-
-        this.auxiliary_data = auxiliaryData;
-
-        this.link_dmg = 3 * Math.floor((linkData[0]+1)/2) + 1.5 * linkData[1] + 6 * linkData[2] + 4.5 * linkData[3] + 4 * linkData[4] + 2 * linkData[5];
-
-        //calculate stat rate
-        var stat_difference = this.stat_w_hero - this.stat_wo_hero;
-        var pure_hero_ap = jobData.ap_by_hero(this.level);
-
-        var main_stat_per = Math.round(stat_difference/pure_hero_ap);
-        
-        //calculate pure stat
-
-        var stat_w_per = this.stat_wo_hero - this.abs_stat;
-
-        var pure_stat = Math.ceil(stat_w_per/main_stat_per);
-
-        //calculate att_mag
-
-
-
-
-
-
-        this.stat_list[0] = pure_stat;
-        this.stat_list[1] = main_stat_per;
-        this.stat_list[2] = this.abs_stat;
-        this.stat_list[3] = this.sub_stat;
-        this.stat_list[4] = 0;
-        this.stat_list[5] = 0;
-
-
-
-
-
-
-
-
-
-        
-        
-    }
-}
-
-export class TemplateStatdata
+export class statData
 {
     stat_raw_data:number[] = [];
     current_data:number[] = [];
@@ -214,10 +105,8 @@ export class TemplateStatdata
     }
 
 
-    add_stat(to_add:TemplateStatdata)
+    add_stat(to_add:statData)
     {
-        
-
         this.main_stat_pure += to_add.main_stat_pure;
         this.main_stat_rate += to_add.main_stat_rate;
         this.main_stat_abs += to_add.main_stat_abs;
@@ -233,9 +122,11 @@ export class TemplateStatdata
         this.cri_rate += to_add.cri_rate;
         this.cri_dmg += to_add.cri_dmg;
 
+        this.update();
+
     }
 
-    sub_stat(to_sub:TemplateStatdata)
+    sub_stat(to_sub:statData)
     {
         this.main_stat_pure -= to_sub.main_stat_pure;
         this.main_stat_rate -= to_sub.main_stat_rate;
@@ -252,13 +143,15 @@ export class TemplateStatdata
         this.cri_rate -= to_sub.cri_rate;
         this.cri_dmg -= to_sub.cri_dmg;
 
+        this.update();
+
     }
 
     deepCopy()
     {   
         this.update();
 
-        return new TemplateStatdata(this.current_data);
+        return new statData(this.current_data);
     }
 
     calcMainStat():number
@@ -271,7 +164,7 @@ export class TemplateStatdata
     
 }
 
-export class TemplateJobData
+export class jobData
 {
     jobName_:string;
 
@@ -286,17 +179,17 @@ export class TemplateJobData
     criRein_:number;
     weapData_:number[];
 
-    passiveData_:TemplateStatdata;
-    passiveData_abl1lv:TemplateStatdata;
-    subweap_:TemplateStatdata;
-    linkAbility_main:TemplateStatdata;
-    linkAbility_sub:TemplateStatdata;
-    farm_:TemplateStatdata;
-    union_:TemplateStatdata;
-    doping_:TemplateStatdata;
-    coreStat_:TemplateStatdata;
+    passiveData_:statData;
+    passiveData_abl1lv:statData;
+    subweap_:statData;
+    linkAbility_main:statData;
+    linkAbility_sub:statData;
+    farm_:statData;
+    union_:statData;
+    doping_:statData= new statData([30,0,0,0,0,0,180,4,40,50,0,0,0,30]);//데이터 관리 고민 해야함;
+    coreStat_:statData;
 
-    statData_:TemplateStatdata;
+    statData_:statData;
 
     constructor(jobName:jobNames)
     {
@@ -315,16 +208,15 @@ export class TemplateJobData
         
 
 
-        this.passiveData_ = new TemplateStatdata(jobPassive_base[jobName]);
+        this.passiveData_ = new statData(jobPassive_base[jobName]);
         this.passiveData_.ign_dmg = jobAddIGR[jobName][0];
-        this.passiveData_abl1lv = new TemplateStatdata(jobPassive_Lv1[jobName]);
-        this.subweap_ = new TemplateStatdata(jobSubweapBase[jobName]);
-        this.linkAbility_main = new TemplateStatdata(jobLinkAbilities_main[jobName]);
-        this.linkAbility_sub  = new TemplateStatdata(jobLinkAbilities_semi[jobName]);
-        this.farm_ = new TemplateStatdata(jobFarm[jobName]);
-        this.union_ = new TemplateStatdata(jobUnion[jobName]);
-        this.coreStat_ = new TemplateStatdata(jobCoreStats[jobName]);
-        this.doping_ = new TemplateStatdata([30,0,0,30,0,0,180,4,40,50,0,0,0,30]);
+        this.passiveData_abl1lv = new statData(jobPassive_Lv1[jobName]);
+        this.subweap_ = new statData(jobSubweapBase[jobName]);
+        this.linkAbility_main = new statData(jobLinkAbilities_main[jobName]);
+        this.linkAbility_sub  = new statData(jobLinkAbilities_semi[jobName]);
+        this.farm_ = new statData(jobFarm[jobName]);
+        this.union_ = new statData(jobUnion[jobName]);
+        this.coreStat_ = new statData(jobCoreStats[jobName]);
 
         this.statData_ = this.passiveData_ ;
         this.statData_.add_stat(this.subweap_);
@@ -332,7 +224,6 @@ export class TemplateJobData
         this.statData_.add_stat(this.farm_);
         this.statData_.add_stat(this.union_);
         this.statData_.add_stat(this.coreStat_);
-        this.statData_.add_stat(this.doping_);
 
 
 
@@ -350,13 +241,37 @@ export class TemplateJobData
         }
     }
 
+    calc100dmg(statinfo:statData, level:number, petit_rumi:number,monster_guard:number):number
+    {
+        var prof_coeff = (this.jobProperty_[0]+1)/2;
+        var weap_coeff = this.jobProperty_[1];
+        var stat_coeff = (4*(Math.floor(statinfo.main_stat_pure * (statinfo.main_stat_rate/100 + 1)) + statinfo.main_stat_abs) + Math.floor(statinfo.sub_stat_pure * (statinfo.sub_stat_rate/100 + 1)) + statinfo.sub_stat_abs) / 100;
+        if(this.jobName_ == '데몬어벤져')
+        {
+            let equip_main_stat = Math.floor(statinfo.main_stat_pure * (statinfo.main_stat_rate/100 + 1)) + statinfo.main_stat_abs;
+            let pure_hp = 545 + level*90;
+
+            stat_coeff = (4*(pure_hp/14 + (equip_main_stat - pure_hp)/17.5) +  Math.floor(statinfo.sub_stat_pure * (statinfo.sub_stat_rate/100 + 1)) + statinfo.sub_stat_abs) / 100;
+        }
+        
+        var att_coeff = Math.floor(statinfo.att_mag * (statinfo.att_mag_rate/100 + 1)) + petit_rumi;
+        var dmg_coeff = (100 + statinfo.dmg + statinfo.boss_dmg) / 100;
+        var final_coeff = (100 + statinfo.final_dmg) / 100;
+        var ign_coeff = Math.max(0, 1 - monster_guard / 100 * (1-statinfo.ign_dmg / 100));
+        var cri_coeff = Math.min(statinfo.cri_rate,100)/100 * (0.35 + statinfo.cri_dmg/100) + 1;
+       
+
+        return Math.floor(prof_coeff * weap_coeff * stat_coeff * att_coeff * dmg_coeff * final_coeff * ign_coeff * cri_coeff);
+    }
+
+
 }
 
 
 export class TemplateData
 {
     
-    jobData_:TemplateJobData;
+    jobData_:jobData;
     jobName_:jobNames;
     gradeName_:gradeNames;
     level_:number;
@@ -367,15 +282,15 @@ export class TemplateData
     petit_rumi:number = 0;
     monster_gaurd_rate:number;
     
-    totalStat_ :TemplateStatdata;
-    templatejobStat_:TemplateStatdata;
-    gradeEquipStat_ :TemplateStatdata;
-    optimizeResult_:TemplateStatdata;
+    totalStat_ :statData;
+    templatejobStat_:statData;
+    gradeEquipStat_ :statData;
+    optimizeResult_:statData;
 
 
 
 
-    constructor(gradeName:gradeNames, jobData:TemplateJobData, monGaurd:number)
+    constructor(gradeName:gradeNames, jobData:jobData, monGaurd:number)
     {
         this.monster_gaurd_rate = monGaurd;
         this.gradeName_ = gradeName;
@@ -389,8 +304,9 @@ export class TemplateData
 
 
         //장비 수준 확정
-        this.gradeEquipStat_ = new TemplateStatdata(equipLevel[gradeName]);
-        this.gradeEquipStat_.add_stat(new TemplateStatdata(equipCoreAdd[gradeName]));
+        this.gradeEquipStat_ = new statData(equipLevel[gradeName]);
+        this.gradeEquipStat_.add_stat(new statData(equipCoreAdd[gradeName]));
+        this.gradeEquipStat_.add_stat(this.jobData_.doping_);
         //메용, 시그 보정
 
         this.gradeEquipStat_.main_stat_pure += this.jobData_.ap_by_hero(this.level_);
@@ -416,17 +332,17 @@ export class TemplateData
         }
         if(jobData.jobSubweapType_ == 1)
         {
-            this.gradeEquipStat_.add_stat(new TemplateStatdata(equipSubweap_case1[gradeName]));
+            this.gradeEquipStat_.add_stat(new statData(equipSubweap_case1[gradeName]));
         }
         else if(jobData.jobSubweapType_ == 2)
         {
-            this.gradeEquipStat_.add_stat(new TemplateStatdata(equipSubweap_case2[gradeName]));
+            this.gradeEquipStat_.add_stat(new statData(equipSubweap_case2[gradeName]));
         }
         //18 유닠둘둘 이하 보정
         if(equipLevelSmooth[gradeName] == 1)
         {
             this.templatejobStat_.sub_stat(jobData.farm_);
-            this.templatejobStat_.add_stat(new TemplateStatdata(equipFarm[gradeName]));
+            this.templatejobStat_.add_stat(new statData(equipFarm[gradeName]));
             
             if(gradeName=='버닝메린이')
             {
@@ -468,35 +384,135 @@ export class TemplateData
 
     calcMainStat():number
     {
-    
         return this.totalStat_.calcMainStat();
     }
 
     calc100dmg():number
     {
-        var prof_coeff = (this.jobData_.jobProperty_[0]+1)/2;
-        var weap_coeff = this.jobData_.jobProperty_[1];
-        var stat_coeff = (4*(Math.floor(this.totalStat_.main_stat_pure * (this.totalStat_.main_stat_rate/100 + 1)) + this.totalStat_.main_stat_abs) + Math.floor(this.totalStat_.sub_stat_pure * (this.totalStat_.sub_stat_rate/100 + 1)) + this.totalStat_.sub_stat_abs) / 100;
-        if(this.jobName_ == '데몬어벤져')
-        {
-            let equip_main_stat = Math.floor(this.totalStat_.main_stat_pure * (this.totalStat_.main_stat_rate/100 + 1)) + this.totalStat_.main_stat_abs;
-            let pure_hp = 545 + this.level_*90;
-
-            stat_coeff = (4*(pure_hp/14 + (equip_main_stat - pure_hp)/17.5) +  Math.floor(this.totalStat_.sub_stat_pure * (this.totalStat_.sub_stat_rate/100 + 1)) + this.totalStat_.sub_stat_abs) / 100;
-        }
-        
-        var att_coeff = Math.floor(this.totalStat_.att_mag * (this.totalStat_.att_mag_rate/100 + 1)) + this.petit_rumi;
-        var dmg_coeff = (100 + this.totalStat_.dmg + this.totalStat_.boss_dmg) / 100;
-        var final_coeff = (100 + this.totalStat_.final_dmg) / 100;
-        var ign_coeff = Math.max(0, 1 - this.monster_gaurd_rate / 100 * (1-this.totalStat_.ign_dmg / 100));
-        var cri_coeff = Math.min(this.totalStat_.cri_rate,100)/100 * (0.35 + this.totalStat_.cri_dmg/100) + 1;
-        
-        
-
-        return Math.floor(prof_coeff * weap_coeff * stat_coeff * att_coeff * dmg_coeff * final_coeff * ign_coeff * cri_coeff);
+        return this.jobData_.calc100dmg(this.totalStat_,this.level_,this.petit_rumi,this.monster_gaurd_rate);
     }
 
+}
+
+export class UserStatdata
+{
+    jobName:jobNames;
+    jobData_:jobData;
+    dopingData:statData;
+    statData_:statData;
+    doping_applied:statData;
+
+    server:number;
+    level:number;
+    final_dmg:number;
+
+    stat_w_hero:number;
+    stat_wo_hero:number;
+
+    stat_pure:number;
+    stat_rate:number;
+    stat_abs:number;
+    sub_stat:number;
+    stat_atk:number;
+    dmg:number;
+    boss_dmg:number;
+    ign_dmg:number;
+    cri_dmg:number;
+    att_mag:number;
+    att_mag_rate:number;
+    auxiliary_data:number[];
+    link_dmg:number;
 
 
+    
+
+    constructor(jobData:jobData, baseData:number[], statData_front:number[], statData_back:number[], equipData:number[], auxiliaryData:number[],linkData:number[])
+    {
+        this.jobName = jobData.jobName_;
+        this.jobData_ = jobData;
+        this.dopingData = jobData.doping_;
+
+        this.server = baseData[0];
+        this.level = baseData[1];
+        this.final_dmg = baseData[2];
+
+        //스탯 계산
+
+        this.stat_w_hero = 0;
+        this.stat_wo_hero = 0;
+        this.sub_stat = 0;
+
+        if(jobData.jobStatType_== 2) //제논
+        {
+            this.stat_w_hero = statData_front[0]+statData_front[1]+statData_front[2];
+            this.stat_wo_hero = statData_front[3]+statData_front[4]+statData_front[5];
+        }
+        else if(jobData.jobStatType_== 1) //이중 부스탯
+        {
+            this.stat_w_hero = statData_front[0];
+            this.stat_wo_hero = statData_front[1];
+            this.sub_stat = statData_front[2]+statData_front[3];
+        }
+        else
+        {
+            this.stat_w_hero = statData_front[0];
+            this.stat_wo_hero = statData_front[1];
+            this.sub_stat = statData_front[2];
+        }
+
+        this.stat_atk = statData_back[0];
+        this.dmg = statData_back[1];
+        this.boss_dmg = statData_back[2];
+        this.ign_dmg =  (1 - (1 - statData_back[3] * 0.01) * (1 - 3 * Math.floor((linkData[0]+1)/2) * 0.01)) * 100;
+        this.cri_dmg = statData_back[4];
+
+        this.att_mag_rate = equipData[0]+jobData.statData_.att_mag_rate;
+        
+        this.stat_abs = 0;
+        for(var ii=1; ii < equipData.length; ii++)
+        {
+            this.stat_abs += equipData[ii];
+        }
+
+        this.auxiliary_data = auxiliaryData;
+
+        this.link_dmg = 3 * Math.floor((linkData[0]+1)/2) + 1.5 * linkData[1] + 6 * linkData[2] + 4.5 * linkData[3] + 4 * linkData[4] + 2 * linkData[5];
+
+        //calculate stat rate
+        var stat_difference = this.stat_w_hero - this.stat_wo_hero;
+        var pure_hero_ap = jobData.ap_by_hero(this.level);
+
+        this.stat_rate = Math.round((stat_difference/pure_hero_ap-1)*100);
+        
+        //calculate pure stat
+
+        var stat_w_per = this.stat_wo_hero - this.stat_abs;
+
+        this.stat_pure = Math.ceil(stat_w_per/(1+this.stat_rate/100));
+
+        //calculate att_mag
+
+        var job_weap_coeff = jobData.jobProperty_[1];
+
+        this.att_mag = Math.ceil(this.stat_atk/((this.sub_stat+4*this.stat_w_hero)*0.01*job_weap_coeff*(1+this.dmg*0.01)*(1+this.final_dmg*0.01)*(1+this.att_mag_rate*0.01)))
+
+
+        this.statData_ = new statData([this.stat_pure, this.stat_rate, this.stat_abs, this.sub_stat,0,0,this.att_mag,this.att_mag_rate,this.dmg+this.link_dmg,this.boss_dmg,this.final_dmg,this.ign_dmg,100,this.cri_dmg]);
+
+        this.doping_applied = this.statData_.deepCopy();
+        this.doping_applied.add_stat(jobData.doping_);
+
+        //추가 조정, 메소드 관리 필요
+
+        this.doping_applied.main_stat_pure += this.jobData_.ap_by_hero(this.level);
+        this.doping_applied.ign_dmg = (1 - (1 -this.doping_applied.ign_dmg * 0.01) * (1 - jobAddIGR[this.jobName][1] * 0.01) * (1 - auxiliaryData[0] * 2 * 0.01)) * 100;
+        
+        
+    }
+
+    calc100dmg(monster_gaurd_rate:number):number
+    {
+        return this.jobData_.calc100dmg(this.doping_applied,this.level,0,monster_gaurd_rate);
+    }
 
 }

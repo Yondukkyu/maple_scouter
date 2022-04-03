@@ -7,8 +7,10 @@ import { Title } from '@angular/platform-browser';
 
 
 import { jobNames, jobs } from 'src/app/data/job_data';
-import { TemplateData, TemplateJobData } from 'src/app/data/data_format';
-import { equipLevel, grades, templategrades } from 'src/app/data/equip_data';
+import { TemplateData, jobData, UserStatdata } from 'src/app/data/data_format';
+import { equipLevel, gradeMainStat, grades, templategrades } from 'src/app/data/equip_data';
+import { polynomial_regression } from 'src/app/functions/poly_reg';
+import { CubicSolver } from 'src/app/functions/eqsolver';
 
 @Component({
   selector: 'app-container',
@@ -24,12 +26,14 @@ export class ScouterComponent implements OnInit {
 
   jobName:jobNames = '나이트로드';
   basicData:number[] = [0,250,0];//서버, 레벨, 최종댐순
-  jobdata:TemplateJobData = new TemplateJobData(this.jobName);
+  jobdata:jobData = new jobData(this.jobName);
   monster_guard:number = 300;
 
   jobTemplateData:TemplateData[] = [];
   job100dmgarr:number[]=[];
   jobMainstatarr:number[]=[];
+
+  userStatData_:UserStatdata;
 
   
  
@@ -52,7 +56,9 @@ export class ScouterComponent implements OnInit {
 
   reboot_final_dmg : number = 0;
 
+  spline_data:number[] = [];
 
+  actual_stat:number = 0;
 
   constructor(
     private snackbar: MatSnackBar,
@@ -63,6 +69,8 @@ export class ScouterComponent implements OnInit {
     );
 
     this.initializeJobValues();
+    this.userStatData_ = new UserStatdata(this.jobdata, this.basicData, this.stat_table_front, this.stat_table_back, this.equip_table, this.auxiliary_table, this.link_table);
+
   }
 
 
@@ -82,7 +90,7 @@ export class ScouterComponent implements OnInit {
 
   initializeJobValues()
   {
-    this.jobdata = new TemplateJobData(this.jobName);
+    this.jobdata = new jobData(this.jobName);
 
     if(this.jobdata.jobStatType_== 3)
     {
@@ -111,15 +119,19 @@ export class ScouterComponent implements OnInit {
     for (var ii = 0; ii<templategrades.length; ii++)
     {
       this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard);
-      this.jobMainstatarr[ii]=this.jobTemplateData[ii].calcMainStat();
+      this.jobMainstatarr[ii]=gradeMainStat[templategrades[ii]];
       this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();   
     }
 
     //최종댐 계산
 
     this.calculate_additive_final_dmg();
-     console.log(this.jobMainstatarr);
-     console.log(this.job100dmgarr);
+    console.log(this.jobMainstatarr);
+    console.log(this.job100dmgarr);
+
+    //추세선생성
+
+    this.spline_data = polynomial_regression(this.jobMainstatarr,this.job100dmgarr,3);
 
   }
 
@@ -146,7 +158,14 @@ export class ScouterComponent implements OnInit {
 
   }
 
- 
+  calculate_user_stat()
+  {
+    this.userStatData_ = new UserStatdata(this.jobdata, this.basicData, this.stat_table_front, this.stat_table_back, this.equip_table, this.auxiliary_table, this.link_table);
+
+    
+    this.actual_stat = Math.floor(CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)));
+
+  }
 
   
 }

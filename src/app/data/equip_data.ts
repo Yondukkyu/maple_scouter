@@ -31,12 +31,27 @@ export const templategrades: string[] =
     '해방 초고스펙',
     '5칠흑 2여명',
     '9칠흑 2여명',
-    '현실적 이론끝',
 ]
 
 export type templategradeNames = typeof templategrades[number];
 
 
+// 대표 스탯값들
+
+export const gradeMainStat: Record<templategradeNames, number> =
+{
+    '버닝메린이' : 4200,
+    '에픽둘둘' : 19860,
+    '에픽+둘둘' : 26920,
+    '유닠둘둘' : 36950,
+    '18유닠둘둘' : 42800,
+    '반레전둘둘' : 49090,
+    '레전둘둘' : 57980,
+    '해방 초고스펙' : 67240,
+    '5칠흑 2여명' : 77460,
+    '9칠흑 2여명' : 87990,
+
+}
 
 
 
