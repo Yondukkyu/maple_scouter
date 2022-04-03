@@ -472,7 +472,6 @@ export const Hero: Record<string, number[]> =
     '발할라' : [0.0423, 30],
 }
 
-
 export const Xenon: Record<string, number[]> =
 {
     '퍼지롭' : [0.3325, 60],
