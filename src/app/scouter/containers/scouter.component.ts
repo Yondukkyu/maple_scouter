@@ -119,8 +119,8 @@ export class ScouterComponent implements OnInit {
     for (var ii = 0; ii<templategrades.length; ii++)
     {
       this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard);
-      this.jobMainstatarr[ii]=gradeMainStat[templategrades[ii]]/10000;
-      this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg()/10000/10000/10000;   
+      this.jobMainstatarr[ii]=gradeMainStat[templategrades[ii]];
+      this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();   
     }
 
     //최종댐 계산
@@ -163,7 +163,7 @@ export class ScouterComponent implements OnInit {
     this.userStatData_ = new UserStatdata(this.jobdata, this.basicData, this.stat_table_front, this.stat_table_back, this.equip_table, this.auxiliary_table, this.link_table);
 
     
-    this.actual_stat = Math.floor(10000*CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)/10000/10000/10000));
+    this.actual_stat = Math.floor(CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)));
 
   }
 

@@ -1,5 +1,7 @@
 import { optimizeHyperUnion } from "../functions/optimizer";
-import {equipAuxiliary, equipCoolComp, equipCoreAdd,
+import {equipAuxiliary,
+        equipCoolComp,
+        equipCoreAdd,
         equipFarm,
         equipjobWeapattComp,
         equipLevel,
@@ -31,135 +33,7 @@ import {jobNames,
         jobAddIGR,
 } from "./job_data";
 
-export class UserStatdata
-{
-    jobName:jobNames;
-    jobData_:jobData;
-    dopingData:statData;
-    statData_:statData;
-    doping_applied:statData;
 
-    server:number;
-    level:number;
-    final_dmg:number;
-
-    stat_w_hero:number;
-    stat_wo_hero:number;
-
-    stat_pure:number;
-    stat_rate:number;
-    stat_abs:number;
-    sub_stat:number;
-    stat_atk:number;
-    dmg:number;
-    boss_dmg:number;
-    ign_dmg:number;
-    cri_dmg:number;
-    att_mag:number;
-    att_mag_rate:number;
-    auxiliary_data:number[];
-    link_dmg:number;
-
-
-    
-
-    constructor(jobData:jobData, baseData:number[], statData_front:number[], statData_back:number[], equipData:number[], auxiliaryData:number[],linkData:number[])
-    {
-        this.jobName = jobData.jobName_;
-        this.jobData_ = jobData;
-        this.dopingData = jobData.doping_;
-
-        this.server = baseData[0];
-        this.level = baseData[1];
-        this.final_dmg = baseData[2];
-
-        //스탯 계산
-
-        this.stat_w_hero = 0;
-        this.stat_wo_hero = 0;
-        this.sub_stat = 0;
-
-        if(jobData.jobStatType_== 2) //제논
-        {
-            this.stat_w_hero = statData_front[0]+statData_front[1]+statData_front[2];
-            this.stat_wo_hero = statData_front[3]+statData_front[4]+statData_front[5];
-        }
-        else if(jobData.jobStatType_== 1) //이중 부스탯
-        {
-            this.stat_w_hero = statData_front[0];
-            this.stat_wo_hero = statData_front[1];
-            this.sub_stat = statData_front[2]+statData_front[3];
-        }
-        else
-        {
-            this.stat_w_hero = statData_front[0];
-            this.stat_wo_hero = statData_front[1];
-            this.sub_stat = statData_front[2];
-        }
-
-        this.stat_atk = statData_back[0];
-        this.dmg = statData_back[1];
-        this.boss_dmg = statData_back[2];
-        this.ign_dmg =  (1 - (1 - statData_back[3] * 0.01) * (1 - 3 * Math.floor((linkData[0]+1)/2) * 0.01)) * 100;
-        this.cri_dmg = statData_back[4];
-
-        this.att_mag_rate = equipData[0]+jobData.statData_.att_mag_rate;
-        
-        this.stat_abs = 0;
-        for(var ii=1; ii < equipData.length; ii++)
-        {
-            this.stat_abs += equipData[ii];
-        }
-
-        this.auxiliary_data = auxiliaryData;
-
-        this.link_dmg = 3 * Math.floor((linkData[0]+1)/2) + 1.5 * linkData[1] + 6 * linkData[2] + 4.5 * linkData[3] + 4 * linkData[4] + 2 * linkData[5];
-
-        //calculate stat rate
-        var stat_difference = this.stat_w_hero - this.stat_wo_hero;
-        var pure_hero_ap = jobData.ap_by_hero(this.level);
-
-        this.stat_rate = Math.round((stat_difference/pure_hero_ap-1)*100);
-        
-        //calculate pure stat
-
-        var stat_w_per = this.stat_wo_hero - this.stat_abs;
-
-        this.stat_pure = Math.ceil(stat_w_per/(1+this.stat_rate/100));
-
-        //calculate att_mag
-
-        var job_weap_coeff = jobData.jobProperty_[1];
-
-        this.att_mag = Math.ceil(this.stat_atk/((this.sub_stat+4*this.stat_w_hero)*0.01*job_weap_coeff*(1+this.dmg*0.01)*(1+this.final_dmg*0.01)*(1+this.att_mag_rate*0.01)))
-
-
-        this.statData_ = new statData([this.stat_pure, this.stat_rate, this.stat_abs, this.sub_stat,0,0,this.att_mag,this.att_mag_rate,this.dmg+this.link_dmg,this.boss_dmg,this.final_dmg,this.ign_dmg,100,this.cri_dmg]);
-
-        this.doping_applied = this.statData_.deepCopy();
-        this.doping_applied.add_stat(jobData.doping_);
-
-        //추가 조정, 메소드 관리 필요
-
-        this.doping_applied.main_stat_pure += this.jobData_.ap_by_hero(this.level);
-        this.doping_applied.ign_dmg = (1 - (1 -this.doping_applied.ign_dmg * 0.01) * (1 - jobAddIGR[this.jobName][1] * 0.01) * (1 - auxiliaryData[0] * 2 * 0.01)) * 100;
-        
-        
-    }
-
-    calc100dmg(monster_gaurd_rate:number):number
-    {
-        return this.jobData_.calc100dmg(this.doping_applied,this.level,0,monster_gaurd_rate);
-    }
-
-
-
-
-
-
-
-
-}
 
 export class statData
 {
@@ -518,7 +392,127 @@ export class TemplateData
         return this.jobData_.calc100dmg(this.totalStat_,this.level_,this.petit_rumi,this.monster_gaurd_rate);
     }
 
+}
+
+export class UserStatdata
+{
+    jobName:jobNames;
+    jobData_:jobData;
+    dopingData:statData;
+    statData_:statData;
+    doping_applied:statData;
+
+    server:number;
+    level:number;
+    final_dmg:number;
+
+    stat_w_hero:number;
+    stat_wo_hero:number;
+
+    stat_pure:number;
+    stat_rate:number;
+    stat_abs:number;
+    sub_stat:number;
+    stat_atk:number;
+    dmg:number;
+    boss_dmg:number;
+    ign_dmg:number;
+    cri_dmg:number;
+    att_mag:number;
+    att_mag_rate:number;
+    auxiliary_data:number[];
+    link_dmg:number;
 
 
+    
+
+    constructor(jobData:jobData, baseData:number[], statData_front:number[], statData_back:number[], equipData:number[], auxiliaryData:number[],linkData:number[])
+    {
+        this.jobName = jobData.jobName_;
+        this.jobData_ = jobData;
+        this.dopingData = jobData.doping_;
+
+        this.server = baseData[0];
+        this.level = baseData[1];
+        this.final_dmg = baseData[2];
+
+        //스탯 계산
+
+        this.stat_w_hero = 0;
+        this.stat_wo_hero = 0;
+        this.sub_stat = 0;
+
+        if(jobData.jobStatType_== 2) //제논
+        {
+            this.stat_w_hero = statData_front[0]+statData_front[1]+statData_front[2];
+            this.stat_wo_hero = statData_front[3]+statData_front[4]+statData_front[5];
+        }
+        else if(jobData.jobStatType_== 1) //이중 부스탯
+        {
+            this.stat_w_hero = statData_front[0];
+            this.stat_wo_hero = statData_front[1];
+            this.sub_stat = statData_front[2]+statData_front[3];
+        }
+        else
+        {
+            this.stat_w_hero = statData_front[0];
+            this.stat_wo_hero = statData_front[1];
+            this.sub_stat = statData_front[2];
+        }
+
+        this.stat_atk = statData_back[0];
+        this.dmg = statData_back[1];
+        this.boss_dmg = statData_back[2];
+        this.ign_dmg =  (1 - (1 - statData_back[3] * 0.01) * (1 - 3 * Math.floor((linkData[0]+1)/2) * 0.01)) * 100;
+        this.cri_dmg = statData_back[4];
+
+        this.att_mag_rate = equipData[0]+jobData.statData_.att_mag_rate;
+        
+        this.stat_abs = 0;
+        for(var ii=1; ii < equipData.length; ii++)
+        {
+            this.stat_abs += equipData[ii];
+        }
+
+        this.auxiliary_data = auxiliaryData;
+
+        this.link_dmg = 3 * Math.floor((linkData[0]+1)/2) + 1.5 * linkData[1] + 6 * linkData[2] + 4.5 * linkData[3] + 4 * linkData[4] + 2 * linkData[5];
+
+        //calculate stat rate
+        var stat_difference = this.stat_w_hero - this.stat_wo_hero;
+        var pure_hero_ap = jobData.ap_by_hero(this.level);
+
+        this.stat_rate = Math.round((stat_difference/pure_hero_ap-1)*100);
+        
+        //calculate pure stat
+
+        var stat_w_per = this.stat_wo_hero - this.stat_abs;
+
+        this.stat_pure = Math.ceil(stat_w_per/(1+this.stat_rate/100));
+
+        //calculate att_mag
+
+        var job_weap_coeff = jobData.jobProperty_[1];
+
+        this.att_mag = Math.ceil(this.stat_atk/((this.sub_stat+4*this.stat_w_hero)*0.01*job_weap_coeff*(1+this.dmg*0.01)*(1+this.final_dmg*0.01)*(1+this.att_mag_rate*0.01)))
+
+
+        this.statData_ = new statData([this.stat_pure, this.stat_rate, this.stat_abs, this.sub_stat,0,0,this.att_mag,this.att_mag_rate,this.dmg+this.link_dmg,this.boss_dmg,this.final_dmg,this.ign_dmg,100,this.cri_dmg]);
+
+        this.doping_applied = this.statData_.deepCopy();
+        this.doping_applied.add_stat(jobData.doping_);
+
+        //추가 조정, 메소드 관리 필요
+
+        this.doping_applied.main_stat_pure += this.jobData_.ap_by_hero(this.level);
+        this.doping_applied.ign_dmg = (1 - (1 -this.doping_applied.ign_dmg * 0.01) * (1 - jobAddIGR[this.jobName][1] * 0.01) * (1 - auxiliaryData[0] * 2 * 0.01)) * 100;
+        
+        
+    }
+
+    calc100dmg(monster_gaurd_rate:number):number
+    {
+        return this.jobData_.calc100dmg(this.doping_applied,this.level,0,monster_gaurd_rate);
+    }
 
 }
