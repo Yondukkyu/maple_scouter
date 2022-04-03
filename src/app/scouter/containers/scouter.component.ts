@@ -23,6 +23,7 @@ export class ScouterComponent implements OnInit {
   template_grades = templategrades;
 
   jobName:jobNames = '나이트로드';
+  basicData:number[] = [0,250,0];//서버, 레벨, 최종댐순
   jobdata:TemplateJobData = new TemplateJobData(this.jobName);
   monster_guard:number = 300;
 
@@ -37,7 +38,7 @@ export class ScouterComponent implements OnInit {
   isLoading = false;
   progress = 0;
 
-  stat_table_front :number[] = [0,];
+  stat_table_front :number[] = [];
   stat_table_back :number[] = [];
   link_table :number[] = [6,6,2,2,2,0];
   equip_table :number[] = [];
@@ -48,8 +49,8 @@ export class ScouterComponent implements OnInit {
   stat_table : string[] = statListCommon;
   equip_table_list :string[]=[];
   auxiliary_table_list : number[]  = [];
-  final_dmg : number = 0;
 
+  reboot_final_dmg : number = 0;
 
 
 
@@ -106,24 +107,46 @@ export class ScouterComponent implements OnInit {
 
      //어빌, 쿨, 벞지, 크리인
     this.auxiliary_table_list = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
-     
-    console.log('');
+
     for (var ii = 0; ii<templategrades.length; ii++)
     {
       this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard);
       this.jobMainstatarr[ii]=this.jobTemplateData[ii].calcMainStat();
       this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();   
     }
-     
+
+    //최종댐 계산
+
+    this.calculate_additive_final_dmg();
      console.log(this.jobMainstatarr);
      console.log(this.job100dmgarr);
 
   }
 
-  // calculate_final_dmg()
-  // {
-  //   this.final_dmg = this.jobdata.statData_
-  // }
+  calculate_additive_final_dmg()
+  {
+    if(this.basicData[0] == 1)
+    {
+      if(this.basicData[1]<250)
+      {
+        this.reboot_final_dmg = 60;
+      }
+      else
+      {
+        this.reboot_final_dmg = 65;
+      }
+    }
+    else
+    {
+      this.reboot_final_dmg = 0;
+    }
+
+    this.basicData[2] = Math.round(((this.jobdata.statData_.final_dmg * 0.01 + 1) * (this.reboot_final_dmg * 0.01 + 1) * 100 - 100)*100)/100 ;
+     
+
+  }
+
+ 
 
   
 }
