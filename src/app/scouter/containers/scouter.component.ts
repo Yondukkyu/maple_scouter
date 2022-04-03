@@ -7,7 +7,10 @@ import { Title } from '@angular/platform-browser';
 
 
 import { jobNames, jobs } from 'src/app/data/job_data';
-import { TemplateJobData } from 'src/app/data/data_format';
+import { TemplateData, jobData, UserStatdata } from 'src/app/data/data_format';
+import { equipLevel, gradeMainStat, grades, templategrades } from 'src/app/data/equip_data';
+import { polynomial_regression } from 'src/app/functions/poly_reg';
+import { CubicSolver } from 'src/app/functions/eqsolver';
 
 @Component({
   selector: 'app-container',
@@ -16,29 +19,46 @@ import { TemplateJobData } from 'src/app/data/data_format';
 })
 export class ScouterComponent implements OnInit {
 
-  jobName:jobNames = '나이트로드';
-  jobdata:TemplateJobData = new TemplateJobData(this.jobName);
-
-
   job_names = jobs;
+  grade_names = grades;
+  equip_levels = equipLevel;
+  template_grades = templategrades;
+
+  jobName:jobNames = '나이트로드';
+  basicData:number[] = [0,250,0];//서버, 레벨, 최종댐순
+  jobdata:jobData = new jobData(this.jobName);
+  monster_guard:number = 300;
+
+  jobTemplateData:TemplateData[] = [];
+  job100dmgarr:number[]=[];
+  jobMainstatarr:number[]=[];
+
+  userStatData_:UserStatdata;
+
   
+ 
 
   worker!: Worker;
   isLoading = false;
   progress = 0;
 
-  stat_table :number[] = [];
+  stat_table_front :number[] = [];
+  stat_table_back :number[] = [];
   link_table :number[] = [6,6,2,2,2,0];
   equip_table :number[] = [];
-  auxiliary_table :number[] = [];
+  auxiliary_table :number[] = [0,0,0,0,0];
   core_table :number[] = [];
 
-  stat_table_list :string[]=statListDefault;
-  equip_table_list :string[]=equipListDefault;
-  auxiliary_table_list : number[]  = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
+  stat_table_list :string[]=[];
+  stat_table : string[] = statListCommon;
+  equip_table_list :string[]=[];
+  auxiliary_table_list : number[]  = [];
 
+  reboot_final_dmg : number = 0;
 
+  spline_data:number[] = [];
 
+  actual_stat:number = 0;
 
   constructor(
     private snackbar: MatSnackBar,
@@ -47,6 +67,10 @@ export class ScouterComponent implements OnInit {
     this.titleService.setTitle(
       'MapleScouter - 환산 스탯 계산'
     );
+
+    this.initializeJobValues();
+    this.userStatData_ = new UserStatdata(this.jobdata, this.basicData, this.stat_table_front, this.stat_table_back, this.equip_table, this.auxiliary_table, this.link_table);
+
   }
 
 
@@ -66,108 +90,128 @@ export class ScouterComponent implements OnInit {
 
   initializeJobValues()
   {
-    this.jobdata = new TemplateJobData(this.jobName);
+    this.jobdata = new jobData(this.jobName);
 
-    // if(this.jobName =='제논')
-    // {
-    //   this.stat_table_list = statListXenon;
-    // }
-    // else if(this.jobName =='데몬어벤져')
-    // {
-    //   this.stat_table_list = statListDemonavenger;
-    // }
-    // else
-    if((this.jobName =='듀얼블레이드')||(this.jobName =='섀도어')||(this.jobName =='카데나'))
+    if(this.jobdata.jobStatType_== 3)
+    {
+      this.stat_table_list = statListDemonavenger;
+      this.equip_table_list = equipListDemonavenger;
+    }
+    else if(this.jobdata.jobStatType_== 2)
+    {
+      this.stat_table_list = statListXenon;
+      this.equip_table_list = equipListXenon;
+    }
+    else if(this.jobdata.jobStatType_== 1)
     {
       this.stat_table_list = statListTwosub;
+      this.equip_table_list = equipListDefault;
     }
     else
     {
       this.stat_table_list = statListDefault;
-    }
-
-
-     // if(this.jobName =='제논')
-    // {
-    //   this.stat_table_list = statListXenon;
-    // }
-    // else if(this.jobName =='데몬어벤져')
-    // {
-    //   this.stat_table_list = statListDemonavenger;
-    // }
-    // else
-    {
       this.equip_table_list = equipListDefault;
     }
 
-    //어빌, 쿨, 벞지, 크리인
+     //어빌, 쿨, 벞지, 크리인
     this.auxiliary_table_list = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
 
+    for (var ii = 0; ii<templategrades.length; ii++)
+    {
+      this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard);
+      this.jobMainstatarr[ii]=gradeMainStat[templategrades[ii]]/10000;
+      this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg()/10000/10000/10000;   
+    }
+
+    //최종댐 계산
+
+    this.calculate_additive_final_dmg();
+    console.log(this.jobMainstatarr);
+    console.log(this.job100dmgarr);
+
+    //추세선생성
+
+    this.spline_data = polynomial_regression(this.jobMainstatarr,this.job100dmgarr,3);
+
+  }
+
+  calculate_additive_final_dmg()
+  {
+    if(this.basicData[0] == 1)
+    {
+      if(this.basicData[1]<250)
+      {
+        this.reboot_final_dmg = 60;
+      }
+      else
+      {
+        this.reboot_final_dmg = 65;
+      }
+    }
+    else
+    {
+      this.reboot_final_dmg = 0;
+    }
+
+    this.basicData[2] = Math.round(((this.jobdata.statData_.final_dmg * 0.01 + 1) * (this.reboot_final_dmg * 0.01 + 1) * 100 - 100)*100)/100 ;
+     
+
+  }
+
+  calculate_user_stat()
+  {
+    this.userStatData_ = new UserStatdata(this.jobdata, this.basicData, this.stat_table_front, this.stat_table_back, this.equip_table, this.auxiliary_table, this.link_table);
+
+    
+    this.actual_stat = Math.floor(10000*CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)/10000/10000/10000));
 
   }
 
   
 }
 
-
-
 const statListDefault: string[] =
 [
-    '레벨',
-    '메용 스탯(시드링 착용)',
+    '메용O 스탯(시드링 착용)',
     '메용X 스탯(시드링 착용)',
     '부스탯',
-    '스공(뒷스공)',
-    '데미지',
-    '보스 데미지(+어빌 상추뎀)',
-    '방무',
-    '쓸샾후 크뎀',
 ]
 
 const statListTwosub: string[] =
 [
-    '레벨',
-    '메용 스탯(시드링 착용)',
+    '메용O 스탯(시드링 착용)',
     '메용X 스탯(시드링 착용)',
     '부스탯(DEX)',
     '부스탯2(STR)',
-    '스공(뒷스공)',
-    '데미지',
-    '보스 데미지(+어빌 상추뎀)',
-    '방무',
-    '쓸샾후 크뎀',
 ]
 
 const statListDemonavenger: string[] =
 [
-    '레벨',
     '쓸뻥O HP(시드링 착용)',
     '쓸뻥X HP(시드링 착용)',
-    '부스탯',
-    '스공(뒷스공)',
-    '데미지',
-    '보스 데미지(+어빌 상추뎀)',
-    '방무',
-    '쓸샾후 크뎀',
+    '부스탯(STR)',
 ]
 
 const statListXenon: string[] =
 [
-    '레벨',
-    'STR 메용 스탯(시드링 착용)',
-    'DEX 메용 스탯(시드링 착용)',
-    'LUK 메용 스탯(시드링 착용)',
+    'STR 메용O 스탯(시드링 착용)',
+    'DEX 메용O 스탯(시드링 착용)',
+    'LUK 메용O 스탯(시드링 착용)',
     'STR 메용X 스탯(시드링 착용)',
     'DEX 메용X 스탯(시드링 착용)',
     'LUK 메용X 스탯(시드링 착용)',
+    
+]
+
+
+const statListCommon:string[] =
+[
+    '스공(메용O, 뒷스공)',
     '데미지',
     '보스 데미지(+어빌 상추뎀)',
     '방무',
     '쓸샾후 크뎀',
 ]
-
-
-
 
 
 

@@ -1,21 +1,27 @@
+import { statData } from "../data/data_format";
 
-export function optimizeHyperUnion( cur_mainStatPure:number,
-                                    cur_mainStatPer:number,
-                                    cur_mainStatAbs:number,
-                                    cur_subStatPure:number,
-                                    cur_subStatPer:number,
-                                    cur_subStatAbs:number,
-                                    cur_criProb:number,
-                                    cur_criDamage:number,
-                                    cur_armorIgnore:number,
-                                    cur_damageSum:number,
-                                    cur_attPower:number,
+export function optimizeHyperUnion( statinfo:statData,
                                     hyp_totalPoint:number,
                                     union_totalBlock:number,
                                     union_reserved:number,
-                                    criReinP:number,
+                                    is_criRein:number,
                                     bossArmor:number)
 {
+  var cur_mainStatPure = statinfo.main_stat_pure;
+  var cur_mainStatPer = statinfo.main_stat_rate;
+  var cur_mainStatAbs = statinfo.main_stat_abs;
+  var cur_subStatPure = statinfo.sub_stat_pure
+  var cur_subStatPer = statinfo.sub_stat_rate;
+  var cur_subStatAbs = statinfo.sub_stat_abs;
+  var cur_criProb = statinfo.cri_rate;
+  var cur_criDamage = statinfo.cri_dmg;
+  var cur_armorIgnore = statinfo.ign_dmg;
+  var cur_damageSum = statinfo.boss_dmg+statinfo.dmg;
+  var cur_attPower = statinfo.att_mag;
+  var criReinP = is_criRein*0.3;
+
+
+
     const  hyp_pointCost = [0, 1, 2, 4, 8, 10, 15, 20, 25, 30, 35, 50, 65, 80, 95, 110, Infinity];
     const  hyp_valueList = [
           [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 390, 420, 450, 450], //mainStat : 0
@@ -186,9 +192,10 @@ export function optimizeHyperUnion( cur_mainStatPure:number,
        
       }
     }
+    
+    var actual_hyp = [hyp_valueList[0][hyp_lvlList[0]], hyp_valueList[1][hyp_lvlList[1]], hyp_valueList[2][hyp_lvlList[2]], hyp_valueList[3][hyp_lvlList[3]], hyp_valueList[4][hyp_lvlList[4]], hyp_valueList[5][hyp_lvlList[5]], hyp_valueList[6][hyp_lvlList[6]], hyp_valueList[7][hyp_lvlList[7]]];
+    var actual_uni = [5 * uni_lvlList[0], 5 * uni_lvlList[1], uni_lvlList[2], 0.5*uni_lvlList[3], uni_lvlList[4], uni_lvlList[5], uni_lvlList[6], uni_lvlList[7]];
   
-    var total_lvlList = hyp_lvlList.concat(uni_lvlList);
   
-  
-    return total_lvlList;
+    return new statData([actual_uni[0], 0 , actual_hyp[0], actual_uni[1], 0, actual_hyp[1], actual_uni[7]+actual_hyp[7], 0, actual_hyp[5], actual_hyp[6]+actual_uni[6],0,(1-(1-actual_hyp[4]/100)*(1-actual_uni[4]/100))*100,actual_hyp[2]+actual_uni[2], actual_hyp[3]+actual_uni[3]]);
 }
