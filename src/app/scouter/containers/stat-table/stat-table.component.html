@@ -1,33 +1,14 @@
 <mat-card>
     <mat-card-subtitle>스탯창 정보 입력</mat-card-subtitle>
     <mat-card-content>
-        <div>
-            <mat-form-field class="w-192">          
-                <mat-label> 서버 </mat-label>
-                <mat-select [(ngModel)]="stat_table_front[0]">
-                    <mat-option [value]="0">본섭</mat-option>
-                    <mat-option [value]="1">리부트</mat-option>
-                  </mat-select>
-            </mat-form-field>
-        </div>
-        <div>
-            <mat-form-field class="w-192">      
-                <mat-label> 레벨 </mat-label>
-                <input
-                  type="number"
-                  matInput
-                  [(ngModel)]="stat_table_front[1]"
-                  appSelectOnFocus
-                />
-            </mat-form-field>
-        </div>
+        
         <div *ngFor="let list of stat_table_list; let i = index">
             <mat-form-field class="w-192">      
                 <mat-label> {{list}} </mat-label>
                 <input
                   type="number"
                   matInput
-                  [(ngModel)]="stat_table_front[i+2]"
+                  [(ngModel)]="stat_table_front[i]"
                   appSelectOnFocus
                 />
             </mat-form-field>
@@ -38,7 +19,7 @@
                 <input
                   type="number"
                   matInput
-                  [(ngModel)]="stat_table_back[i+1]"
+                  [(ngModel)]="stat_table_back[i]"
                   appSelectOnFocus
                 />
             </mat-form-field>

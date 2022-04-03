@@ -19,6 +19,8 @@ export class StatTableComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  
+
 }
 
 
