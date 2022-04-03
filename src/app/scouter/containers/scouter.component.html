@@ -34,8 +34,10 @@
   </div>
   <div class="layout">
     <app-stat-table
-      [stat_table]="stat_table"
+      [stat_table_front]="stat_table_front"
+      [stat_table_back]="stat_table_back"
       [stat_table_list]="stat_table_list"
+      [stat_table]="stat_table"
     >
     </app-stat-table>
     <app-equip-table
@@ -47,7 +49,6 @@
       [auxiliary_table] = "auxiliary_table"
       [auxiliary_table_list] = "auxiliary_table_list"
     >
-
     </app-auxiliary-table>
     <app-link-table
       [link_table]="link_table"
@@ -55,11 +56,31 @@
     </app-link-table>
   </div>
   <div>
-    <p> {{jobMainstatarr}} </p>
+    <mat-card>
+      <mat-card-subtitle>직업 정보</mat-card-subtitle>
+      <mat-card-content>
+        <div>
+          <mat-label> 스탯창 기본 조건 </mat-label>
+          <h4 class="mat-h4">
+            {{jobName}}
+          </h4>
+          <mat-label> debug1 </mat-label>
+          <h4 class="mat-h4">
+            {{jobTemplateData[1].totalStat_.main_stat_pure}}
+          </h4>
+          <mat-label> debug2 </mat-label>
+          <h4 class="mat-h4">
+            {{jobTemplateData[1].totalStat_.main_stat_rate}}
+          </h4>  
+          <mat-label> debug3 </mat-label>
+          <h4 class="mat-h4">
+            {{jobTemplateData[1].totalStat_.main_stat_abs}}
+          </h4>  
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
-  <div>
-    <p> {{job100dmgarr}} </p>
-  </div>
+
   
 
 

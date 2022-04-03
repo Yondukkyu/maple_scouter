@@ -507,7 +507,7 @@ export const jobBuffCond: Record<jobNames, string> =
 '플레임위자드': '메용, 북 오브 파이어 사용,오버로드 마나X',
 '호영': '메용 사용',
 '히어로': '메용, 10콤보, 인레이지O, 분노',
-'제논': '메용, 서플러스 서플라이 20/20, 인클라인파워X, 오파츠 코드X'
+'제논': '메용, 서플러스 서플라이 20/20, 인클라인파워X, 오파츠 코드X',
 '데몬어벤져': '메용, 디아볼릭 리커버리, 쓸뻥 사용, 오버로드 릴리즈X'
 }
 
@@ -915,6 +915,7 @@ export const jobAddIGR: Record<jobNames,number[]> =
 '데몬어벤져': [52.54, 32.2],
 }
 
+//숙련도, 무기상수
 export const jobProperty: Record<jobNames,number[]> =
 {
   '나이트로드': [0.9, 1.75],
