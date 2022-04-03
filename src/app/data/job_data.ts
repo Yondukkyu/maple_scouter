@@ -915,6 +915,7 @@ export const jobAddIGR: Record<jobNames,number[]> =
 '데몬어벤져': [52.54, 32.2],
 }
 
+//숙련도, 무기상수
 export const jobProperty: Record<jobNames,number[]> =
 {
   '나이트로드': [0.9, 1.75],
