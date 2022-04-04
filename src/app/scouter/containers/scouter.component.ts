@@ -69,7 +69,15 @@ export class ScouterComponent implements OnInit {
     );
 
     this.initializeJobValues();
+    
+    //json activate
+    
+
+    
+
     this.userStatData_ = new UserStatdata(this.jobdata, this.basicData, this.stat_table_front, this.stat_table_back, this.equip_table, this.auxiliary_table, this.link_table);
+    
+
 
   }
 
@@ -85,6 +93,12 @@ export class ScouterComponent implements OnInit {
         '닫기'
       );
     }
+    
+    // const key_ = 'drive';
+
+    // let key2 = localStorage.getItem(key_);
+
+    // let raw = JSON.parse(key2!);
     
   }
 
@@ -133,6 +147,7 @@ export class ScouterComponent implements OnInit {
 
     this.spline_data = polynomial_regression(this.jobMainstatarr,this.job100dmgarr,3);
 
+
   }
 
   calculate_additive_final_dmg()
@@ -164,6 +179,7 @@ export class ScouterComponent implements OnInit {
 
     
     this.actual_stat = Math.floor(CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)));
+
 
   }
 
