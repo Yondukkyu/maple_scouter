@@ -1,11 +1,19 @@
 import { optimizeHyperUnion } from "../functions/optimizer";
 import {equipAuxiliary,
         equipCoolComp,
+        equipCoolComp_demon,
+        equipCoolComp_xenon,
         equipCoreAdd,
+        equipCoreAdd_demon,
+        equipCoreAdd_xenon,
         equipFarm,
+        equipFarm_demon,
+        equipFarm_xenon,
         equipjobWeapattComp,
         equipLevel,
         equipLevelSmooth,
+        equipLevel_demon,
+        equipLevel_xenon,
         equipSubStat,
         equipSubweap_case1,
         equipSubweap_case2,
@@ -306,6 +314,16 @@ export class TemplateData
         //장비 수준 확정
         this.gradeEquipStat_ = new statData(equipLevel[gradeName]);
         this.gradeEquipStat_.add_stat(new statData(equipCoreAdd[gradeName]));
+        if(this.jobName_ == '제논')
+        {
+            this.gradeEquipStat_ = new statData(equipLevel_xenon[gradeName]);
+            this.gradeEquipStat_.add_stat(new statData(equipCoreAdd_xenon[gradeName]));
+        }
+        if(this.jobName_ == '데몬어벤져')
+        {
+            this.gradeEquipStat_ = new statData(equipLevel_demon[gradeName]);
+            this.gradeEquipStat_.add_stat(new statData(equipCoreAdd_demon[gradeName]));
+        }
         this.gradeEquipStat_.add_stat(this.jobData_.doping_);
         //메용, 시그 보정
 
@@ -342,7 +360,20 @@ export class TemplateData
         if(equipLevelSmooth[gradeName] == 1)
         {
             this.templatejobStat_.sub_stat(jobData.farm_);
-            this.templatejobStat_.add_stat(new statData(equipFarm[gradeName]));
+            
+            if(this.jobName_ == '제논')
+            {
+                this.templatejobStat_.add_stat(new statData(equipFarm_xenon[gradeName]));    
+            }
+            if(this.jobName_ == '데몬어벤져')
+            {
+                this.templatejobStat_.add_stat(new statData(equipFarm_demon[gradeName]));    
+            }
+            else
+            {
+                this.templatejobStat_.add_stat(new statData(equipFarm[gradeName]));
+            }
+            
             
             if(gradeName=='버닝메린이')
             {
@@ -362,7 +393,19 @@ export class TemplateData
         //쿨감 보정
         if(jobData.coolReduce_ == 1)
         {
-            this.gradeEquipStat_.main_stat_rate -= equipCoolComp[gradeName][jobCReff[jobData.jobName_][3]];
+            if(this.jobName_ == '제논')
+            {
+                this.gradeEquipStat_.main_stat_rate -= equipCoolComp_xenon[gradeName][jobCReff[jobData.jobName_][3]];
+            }
+            if(this.jobName_ == '데몬어벤져')
+            {
+                this.gradeEquipStat_.main_stat_rate -= equipCoolComp_demon[gradeName][jobCReff[jobData.jobName_][3]];
+            }
+            else
+            {
+                this.gradeEquipStat_.main_stat_rate -= equipCoolComp[gradeName][jobCReff[jobData.jobName_][3]];
+            }
+           
         }
         
 
