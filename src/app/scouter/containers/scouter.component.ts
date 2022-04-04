@@ -95,10 +95,17 @@ export class ScouterComponent implements OnInit {
       this.equip_table = saved_user_data.equip_table;
       this.auxiliary_table = saved_user_data.auxiliary_table;
       this.core_table = saved_user_data.core_table;
-    }
-    this.initializeJobValues();
-    this.actual_stat = Math.floor(CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)));
 
+      //initialize
+      this.initializeJobValues();
+      this.userStatData_ = new UserStatdata(this.jobdata, this.basicData, this.stat_table_front, this.stat_table_back, this.equip_table, this.auxiliary_table, this.link_table);
+      this.actual_stat = Math.floor(CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)));
+
+    }
+    else
+    {
+      this.initializeJobValues();
+    }
     
     
 
@@ -150,7 +157,11 @@ export class ScouterComponent implements OnInit {
     {
       this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard);
       this.jobMainstatarr[ii]=gradeMainStat[templategrades[ii]];
-      this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();   
+      this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();
+      console.log("스카니아 최고의 귀요미 욘두뀨")
+      console.log(this.jobTemplateData[ii].totalStat_.main_stat_pure)
+      console.log(this.jobTemplateData[ii].totalStat_.main_stat_rate) 
+      console.log(this.jobTemplateData[ii].totalStat_.main_stat_abs) 
     }
 
     //최종댐 계산
