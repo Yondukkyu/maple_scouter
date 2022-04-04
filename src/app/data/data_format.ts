@@ -1,4 +1,4 @@
-import { optimizeHyperUnion } from "../functions/optimizer";
+import { optimizeHyperUnion, optimizeHyperUnion_demon, optimizeHyperUnion_xenon } from "../functions/optimizer";
 import {equipAuxiliary,
         equipCoolComp,
         equipCoolComp_demon,
@@ -331,7 +331,7 @@ export class TemplateData
             this.gradeEquipStat_ = new statData(equipLevel_xenon[gradeName]);
             this.gradeEquipStat_.add_stat(new statData(equipCoreAdd_xenon[gradeName]));
         }
-        if(this.jobName_ == '데몬어벤져')
+        else if(this.jobName_ == '데몬어벤져')
         {
             this.gradeEquipStat_ = new statData(equipLevel_demon[gradeName]);
             this.gradeEquipStat_.add_stat(new statData(equipCoreAdd_demon[gradeName]));
@@ -375,7 +375,7 @@ export class TemplateData
             {
                 this.templatejobStat_.add_stat(new statData(equipFarm_xenon[gradeName]));    
             }
-            if(this.jobName_ == '데몬어벤져')
+            else if(this.jobName_ == '데몬어벤져')
             {
                 this.templatejobStat_.add_stat(new statData(equipFarm_demon[gradeName]));    
             }
@@ -407,7 +407,7 @@ export class TemplateData
             {
                 this.gradeEquipStat_.main_stat_rate -= equipCoolComp_xenon[gradeName][jobCReff[jobData.jobName_][3]];
             }
-            if(this.jobName_ == '데몬어벤져')
+            else if(this.jobName_ == '데몬어벤져')
             {
                 this.gradeEquipStat_.main_stat_rate -= equipCoolComp_demon[gradeName][jobCReff[jobData.jobName_][3]];
             }
@@ -422,6 +422,14 @@ export class TemplateData
         this.totalStat_ = this.templatejobStat_;
         this.totalStat_.add_stat(this.gradeEquipStat_);
         this.optimizeResult_ = optimizeHyperUnion(this.totalStat_,this.hyper_point,this.union_blocks,this.reserved_blocks,jobData.criRein_,monGaurd);
+        if(this.jobName_ == '제논')
+        {
+            this.optimizeResult_ = optimizeHyperUnion_xenon(this.totalStat_,this.hyper_point,this.union_blocks,this.reserved_blocks,jobData.criRein_,monGaurd);
+        }
+        if(this.jobName_ == '데몬어벤져')
+        {
+            this.optimizeResult_ = optimizeHyperUnion_demon(this.totalStat_,this.hyper_point,this.union_blocks,this.reserved_blocks,jobData.criRein_,monGaurd,this.level_);
+        }
         this.totalStat_.add_stat(this.optimizeResult_);
 
         //초과 크리 보정
