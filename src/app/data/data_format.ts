@@ -554,14 +554,25 @@ export class UserStatdata
         //calculate pure stat
         var stat_w_per = this.stat_wo_hero - this.stat_abs;
         this.stat_pure = Math.ceil(stat_w_per/(1+this.stat_rate/100));
-        //calculate att_mag
-        var job_weap_coeff = jobData.jobProperty_[1];
-        this.att_mag = Math.ceil(this.stat_atk/((this.sub_stat+4*this.stat_w_hero)*0.01*job_weap_coeff*(1+this.dmg*0.01)*(1+this.final_dmg*0.01)*(1+this.att_mag_rate*0.01)))
+       
+        //데벤져 진짜 아아아아아아아아아아아아ㅏㅇ
+        var actual_main_stat = this.stat_w_hero;
         if(this.jobName == '데몬어벤져')
         {
             var temp_hp = stat_difference * 2.5;
-            
+            var hp_w_per = this.stat_w_hero - this.stat_abs;
+            this.stat_rate = Math.round((hp_w_per/temp_hp-1)*100);
+            this.stat_pure = Math.ceil(hp_w_per/(1+this.stat_rate/100));
+            var level_hp = 545 + this.level * 90;
+            var item_hp = this.stat_w_hero - level_hp;
+            actual_main_stat = level_hp / 14 + item_hp / 17.5;
+
         }
+         //calculate att_mag
+         var job_weap_coeff = jobData.jobProperty_[1];
+
+        this.att_mag = Math.ceil(this.stat_atk/((this.sub_stat+4*actual_main_stat)*0.01*job_weap_coeff*(1+this.dmg*0.01)*(1+this.final_dmg*0.01)*(1+this.att_mag_rate*0.01)))
+  
 
         this.statData_ = new statData([this.stat_pure, this.stat_rate, this.stat_abs, this.sub_stat,0,0,this.att_mag,this.att_mag_rate,this.dmg+this.link_dmg,this.boss_dmg,this.final_dmg,this.ign_dmg,100,this.cri_dmg]);
 
