@@ -322,6 +322,10 @@ export class TemplateData
         //장비 수준 확정
         this.gradeEquipStat_ = new statData(equipLevel[gradeName]);
         this.gradeEquipStat_.add_stat(new statData(equipCoreAdd[gradeName]));
+        //무기공 보정
+        this.gradeEquipStat_.att_mag -= jobMainWeapAtt["히어로"][equipjobWeapattComp[gradeName]];
+        this.gradeEquipStat_.att_mag += jobMainWeapAtt[jobData.jobName_][equipjobWeapattComp[gradeName]];
+        //특이 직업은 별도로 빼버림
         if(this.jobName_ == '제논')
         {
             this.gradeEquipStat_ = new statData(equipLevel_xenon[gradeName]);
@@ -333,8 +337,8 @@ export class TemplateData
             this.gradeEquipStat_.add_stat(new statData(equipCoreAdd_demon[gradeName]));
         }
         this.gradeEquipStat_.add_stat(this.jobData_.doping_);
+        
         //메용, 시그 보정
-
         this.gradeEquipStat_.main_stat_pure += this.jobData_.ap_by_hero(this.level_);
 
         
@@ -348,9 +352,7 @@ export class TemplateData
         }
 
 
-        //무기공 보정
-        this.gradeEquipStat_.att_mag -= jobMainWeapAtt["히어로"][equipjobWeapattComp[gradeName]];
-        this.gradeEquipStat_.att_mag += jobMainWeapAtt[jobData.jobName_][equipjobWeapattComp[gradeName]];
+        
         //2부스탯, 보조 보정
         if(jobData.jobStatType_ == 1)
         {
