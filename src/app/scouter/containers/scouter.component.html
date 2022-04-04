@@ -13,7 +13,7 @@
             <mat-label> 직업 선택 </mat-label>
             <mat-select 
             [(value)]="jobName"
-            (selectionChange)="initializeJobValues()"
+            (selectionChange)=" initializeJobValues()"
             appSelectOnFocus>
               <mat-option *ngFor="let job of job_names" [value]="job">{{job}}</mat-option>
             </mat-select>
@@ -22,7 +22,7 @@
             <mat-label> 루포실 유무 </mat-label>
             <mat-select 
             [(ngModel)]="basicData[3]"
-            (selectionChange)="calculate_additive_final_dmg()">
+            (selectionChange)="initializeJobValues()">
                 <mat-option [value]="1">루포실 사용</mat-option>
                 <mat-option [value]="0">루포실 미사용</mat-option>
               </mat-select>
@@ -33,7 +33,7 @@
               <mat-label> 서버 </mat-label>
               <mat-select
               [(ngModel)]="basicData[0]"
-              (selectionChange)="calculate_additive_final_dmg()">
+              (selectionChange)="initializeJobValues()">
                   <mat-option [value]="0">본섭</mat-option>
                   <mat-option [value]="1">리부트</mat-option>
                 </mat-select>
@@ -46,7 +46,7 @@
                 type="number"
                 matInput
                 [(ngModel)]="basicData[1]"
-                (ngModelChange)="calculate_additive_final_dmg()"
+                (ngModelChange)="initializeJobValues()"
                 appSelectOnFocus
               />
           </mat-form-field>
