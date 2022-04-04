@@ -56,6 +56,7 @@ export class ScouterComponent implements OnInit {
 
   reboot_final_dmg : number = 0;
   ruin_final_dmg : number = 0;
+  actual_final_dmg : number = 0;
 
   spline_data:number[] = [];
 
@@ -153,9 +154,14 @@ export class ScouterComponent implements OnInit {
      //어빌, 쿨, 벞지, 크리인
     this.auxiliary_table_list = [this.jobdata.jobability_, this.jobdata.coolReduce_,this.jobdata.buffFinal_,this.jobdata.criRein_];
 
+    //최종댐 계산
+    this.calculate_additive_final_dmg();
+    console.log(this.jobMainstatarr);
+    console.log(this.job100dmgarr);
+
     for (var ii = 0; ii<templategrades.length; ii++)
     {
-      this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard);
+      this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard, this.actual_final_dmg);
       this.jobMainstatarr[ii]=gradeMainStat[templategrades[ii]];
       this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();
       console.log("스카니아 최고의 귀요미 욘두뀨")
@@ -164,11 +170,7 @@ export class ScouterComponent implements OnInit {
       console.log(this.jobTemplateData[ii].totalStat_.main_stat_abs) 
     }
 
-    //최종댐 계산
-
-    this.calculate_additive_final_dmg();
-    console.log(this.jobMainstatarr);
-    console.log(this.job100dmgarr);
+    
 
     //추세선생성
 
@@ -194,7 +196,7 @@ export class ScouterComponent implements OnInit {
     {
       this.reboot_final_dmg = 0;
     }
-    if(this.basicData[3] == 1)
+    if((this.basicData[3] == 1) && ((this.jobName == '데몬어벤져') || (this.jobName == '데몬슬레이어')))
     {
       this.ruin_final_dmg = 10;
     }
@@ -204,8 +206,7 @@ export class ScouterComponent implements OnInit {
     }
 
     this.basicData[2] = Math.round(((this.jobdata.statData_.final_dmg * 0.01 + 1) * (this.reboot_final_dmg * 0.01 + 1)* (this.ruin_final_dmg * 0.01 + 1) * 100 - 100)*100)/100 ;
-     
-
+    this.actual_final_dmg = Math.round(((this.jobdata.statData_.final_dmg * 0.01 + 1) * (this.ruin_final_dmg * 0.01 + 1) * 100 - 100)*100)/100 ;
   }
 
   calculate_user_stat()

@@ -309,7 +309,7 @@ export class TemplateData
 
 
 
-    constructor(gradeName:gradeNames, jobData:jobData, monGaurd:number)
+    constructor(gradeName:gradeNames, jobData:jobData, monGaurd:number, final_dmg:number)
     {
         this.monster_gaurd_rate = monGaurd;
         this.gradeName_ = gradeName;
@@ -320,6 +320,8 @@ export class TemplateData
         this.hyper_point = equipAuxiliary[gradeName][1];
         this.union_blocks = equipAuxiliary[gradeName][2];
         this.reserved_blocks = equipUnionReserved[gradeName][jobData.buffFinal_];
+        
+        this.jobData_.statData_.final_dmg = final_dmg;
 
 
         //장비 수준 확정
@@ -565,14 +567,20 @@ export class UserStatdata
             this.stat_pure = Math.ceil(hp_w_per/(1+this.stat_rate/100));
             var level_hp = 545 + this.level * 90;
             var item_hp = this.stat_w_hero - level_hp;
-            actual_main_stat = level_hp / 14 + item_hp / 17.5;
-
+            actual_main_stat = level_hp / 14 + item_hp / 17.5;          
         }
          //calculate att_mag
          var job_weap_coeff = jobData.jobProperty_[1];
 
         this.att_mag = Math.ceil(this.stat_atk/((this.sub_stat+4*actual_main_stat)*0.01*job_weap_coeff*(1+this.dmg*0.01)*(1+this.final_dmg*0.01)*(1+this.att_mag_rate*0.01)))
-  
+        
+        console.log("췡")
+        console.log(this.sub_stat)
+        console.log(this.stat_atk)
+        console.log(this.dmg)
+        console.log(this.att_mag_rate)
+        console.log(this.final_dmg)
+        console.log(this.att_mag)
 
         this.statData_ = new statData([this.stat_pure, this.stat_rate, this.stat_abs, this.sub_stat,0,0,this.att_mag,this.att_mag_rate,this.dmg+this.link_dmg,this.boss_dmg,this.final_dmg,this.ign_dmg,100,this.cri_dmg]);
 
@@ -580,8 +588,15 @@ export class UserStatdata
         this.doping_applied.add_stat(jobData.doping_);
 
         //추가 조정, 메소드 관리 필요
-
-        this.doping_applied.main_stat_pure += this.jobData_.ap_by_hero(this.level);
+        
+        if(this.jobName == '데몬어벤져')
+        {
+            this.doping_applied.main_stat_rate -= 40; //쓸뻥이 이미 고려되어있기 때문에 뺸다
+        }
+        else
+        {
+            this.doping_applied.main_stat_pure += this.jobData_.ap_by_hero(this.level);    
+        }
         this.doping_applied.ign_dmg = (1 - (1 -this.doping_applied.ign_dmg * 0.01) * (1 - jobAddIGR[this.jobName][1] * 0.01) * (1 - auxiliaryData[0] * 2 * 0.01)) * 100;
         
         
