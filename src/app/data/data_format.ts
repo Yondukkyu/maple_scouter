@@ -342,7 +342,11 @@ export class TemplateData
         this.gradeEquipStat_.add_stat(this.jobData_.doping_);
         
         //메용, 시그 보정
-        this.gradeEquipStat_.main_stat_pure += this.jobData_.ap_by_hero(this.level_);
+        if(this.jobName_ != '데몬어벤져')
+        {
+            this.gradeEquipStat_.main_stat_pure += this.jobData_.ap_by_hero(this.level_);
+        }
+        
 
         
         if((jobData.jobName_ == '나이트워커')
