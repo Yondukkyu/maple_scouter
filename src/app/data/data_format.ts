@@ -39,6 +39,7 @@ import {jobNames,
         jobCReff,
         jobProperty,
         jobAddIGR,
+        jobDopingData,
 } from "./job_data";
 
 
@@ -194,7 +195,7 @@ export class jobData
     linkAbility_sub:statData;
     farm_:statData;
     union_:statData;
-    doping_:statData= new statData([30,0,0,0,0,0,180,4,40,50,0,0,0,30]);//데이터 관리 고민 해야함;
+    doping_:statData
     coreStat_:statData;
 
     statData_:statData;
@@ -223,8 +224,10 @@ export class jobData
         this.linkAbility_main = new statData(jobLinkAbilities_main[jobName]);
         this.linkAbility_sub  = new statData(jobLinkAbilities_semi[jobName]);
         this.farm_ = new statData(jobFarm[jobName]);
-        this.union_ = new statData(jobUnion[jobName]);
+        this.union_ = new statData(jobUnion[jobName]);        
         this.coreStat_ = new statData(jobCoreStats[jobName]);
+
+        this.doping_ = new statData(jobDopingData[jobName]);
 
         this.statData_ = this.passiveData_ ;
         this.statData_.add_stat(this.subweap_);

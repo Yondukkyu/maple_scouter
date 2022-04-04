@@ -49,8 +49,6 @@ export function optimizeHyperUnion( statinfo:statData,
     var uni_lvlList = [5, 1, 0, 0, 0, 0, 0, 5];
     //초기 스탯, 보댐은 일단은 0부터 시작. 동일 효율 계산이라 지장 없음.
     var statList = [cur_mainStatPure*(100+cur_mainStatPer)/100+cur_mainStatAbs, cur_subStatPure*(100+cur_subStatPer)/100+cur_subStatAbs, cur_criProb, cur_criDamage, cur_armorIgnore, cur_damageSum, 0, cur_attPower];
-    var mainStatPer = cur_mainStatPer;
-    var subStatPer = cur_subStatPer;
     //각 스탯 변화량에 따른 효율값 저장 컨테이너
     var hyp_efficiency = [0, 0, 0, 0, 0, 0, 0, 0];
     var uni_efficiency = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -73,15 +71,15 @@ export function optimizeHyperUnion( statinfo:statData,
         switch(i) {
           //주스탯 효율 계산
           case 0:
-          hyp_after = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]+1]+uni_lvlList[i]*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+subStatPer)/100);
-          uni_after = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]]+(uni_lvlList[i]+1)*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+subStatPer)/100);
-          before = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]]+uni_lvlList[i]*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+subStatPer)/100);
+          hyp_after = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]+1]+uni_lvlList[i]*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+cur_subStatPer)/100);
+          uni_after = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]]+(uni_lvlList[i]+1)*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+cur_subStatPer)/100);
+          before = 4*(statList[0]+hyp_valueList[i][hyp_lvlList[i]]+uni_lvlList[i]*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[1][hyp_lvlList[1]]+uni_lvlList[1]*5*(100+cur_subStatPer)/100);
           break;
           //부스탯 효율 계산
           case 1:
-          hyp_after = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]+1]+uni_lvlList[i]*5*(100+subStatPer)/100);
-          uni_after = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]]+(uni_lvlList[i]+1)*5*(100+subStatPer)/100);
-          before = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]]+uni_lvlList[i]*5*(100+subStatPer)/100);
+          hyp_after = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]+1]+uni_lvlList[i]*5*(100+cur_subStatPer)/100);
+          uni_after = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]]+(uni_lvlList[i]+1)*5*(100+cur_subStatPer)/100);
+          before = 4*(statList[0]+hyp_valueList[0][hyp_lvlList[0]]+uni_lvlList[0]*5*(100+cur_mainStatPer)/100)+(statList[1]+hyp_valueList[i][hyp_lvlList[i]]+uni_lvlList[i]*5*(100+cur_subStatPer)/100);
           break;
           //크리율 효율 계산
           case 2:
@@ -251,8 +249,6 @@ export function optimizeHyperUnion_demon( statinfo:statData,
   var uni_lvlList = [5, 1, 0, 0, 0, 0, 0, 5];
   //초기 스탯, 보댐은 일단은 0부터 시작. 동일 효율 계산이라 지장 없음.
   var statList = [cur_mainStatPure*(100+cur_mainStatPer)/100+cur_mainStatAbs, cur_subStatPure*(100+cur_subStatPer)/100+cur_subStatAbs, cur_criProb, cur_criDamage, cur_armorIgnore, cur_damageSum, 0, cur_attPower];
-  var mainStatPer = cur_mainStatPer;
-  var subStatPer = cur_subStatPer;
   //각 스탯 변화량에 따른 효율값 저장 컨테이너
   var hyp_efficiency = [0, 0, 0, 0, 0, 0, 0, 0];
   var uni_efficiency = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -459,9 +455,6 @@ export  function optimizeHyperUnion_xenon( statinfo:statData,
   var uni_lvlList = [5, 1, 0, 0, 0, 0, 0, 0, 5];
   //초기 스탯, 보댐은 일단은 0부터 시작. 동일 효율 계산이라 지장 없음.
   var statList = [cur_lukStatPure*(100+cur_lukStatPer)/100+cur_lukStatAbs, cur_dexStatPure*(100+cur_dexStatPer)/100+cur_dexStatAbs, cur_strStatPure*(100+cur_strStatPer)/100+cur_strStatAbs, cur_criProb, cur_criDamage, cur_armorIgnore, cur_damageSum, 0, cur_attPower];
-  var lukStatPer = cur_lukStatPer;
-  var dexStatPer = cur_dexStatPer;
-  var strStatPer = cur_strStatPer;
   //각 스탯 변화량에 따른 효율값 저장 컨테이너
   var hyp_efficiency = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   var uni_efficiency = [0, 0, 0, 0, 0, 0, 0, 0, 0];
