@@ -25,7 +25,7 @@ export class ScouterComponent implements OnInit {
   template_grades = templategrades;
 
   jobName:jobNames = '나이트로드';
-  basicData:number[] = [0,250,0];//서버, 레벨, 최종댐순
+  basicData:number[] = [0,250,25,0];//서버, 레벨, 최종댐순
   jobdata:jobData = new jobData(this.jobName);
   monster_guard:number = 300;
 
@@ -55,6 +55,7 @@ export class ScouterComponent implements OnInit {
   auxiliary_table_list : number[]  = [];
 
   reboot_final_dmg : number = 0;
+  ruin_final_dmg : number = 0;
 
   spline_data:number[] = [];
 
@@ -180,8 +181,16 @@ export class ScouterComponent implements OnInit {
     {
       this.reboot_final_dmg = 0;
     }
+    if(this.basicData[3] == 1)
+    {
+      this.ruin_final_dmg = 10;
+    }
+    else
+    {
+      this.ruin_final_dmg = 0;
+    }
 
-    this.basicData[2] = Math.round(((this.jobdata.statData_.final_dmg * 0.01 + 1) * (this.reboot_final_dmg * 0.01 + 1) * 100 - 100)*100)/100 ;
+    this.basicData[2] = Math.round(((this.jobdata.statData_.final_dmg * 0.01 + 1) * (this.reboot_final_dmg * 0.01 + 1)* (this.ruin_final_dmg * 0.01 + 1) * 100 - 100)*100)/100 ;
      
 
   }
@@ -192,6 +201,9 @@ export class ScouterComponent implements OnInit {
 
     
     this.actual_stat = Math.floor(CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)));
+
+    console.log(this.userStatData_.calc100dmg(this.monster_guard))
+    
 
     localStorage.setItem('user_data', JSON.stringify({
       job_name: this.userStatData_.jobName,
