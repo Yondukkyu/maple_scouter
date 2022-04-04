@@ -95,6 +95,7 @@ export class ScouterComponent implements OnInit {
       this.equip_table = saved_user_data.equip_table;
       this.auxiliary_table = saved_user_data.auxiliary_table;
       this.core_table = saved_user_data.core_table;
+      this.actual_stat = saved_user_data.actual_stat;
     }
     this.initializeJobValues();
     
@@ -203,7 +204,7 @@ export class ScouterComponent implements OnInit {
     this.actual_stat = Math.floor(CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)));
 
     console.log(this.userStatData_.calc100dmg(this.monster_guard))
-    
+
 
     localStorage.setItem('user_data', JSON.stringify({
       job_name: this.userStatData_.jobName,
@@ -214,6 +215,7 @@ export class ScouterComponent implements OnInit {
       equip_table : this.equip_table,
       auxiliary_table : this.auxiliary_table,
       core_table : this.core_table,
+      actual_stat : this.actual_stat,
     }));
   }
 
