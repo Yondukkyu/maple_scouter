@@ -70,8 +70,7 @@ export class ScouterComponent implements OnInit {
 
     this.initializeJobValues();
     
-    //json activate
-    
+  
 
     
 
@@ -83,6 +82,25 @@ export class ScouterComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    const saved_user_data = JSON.parse(localStorage.getItem('user_data')!);
+    if(saved_user_data)
+    {
+      this.jobName = saved_user_data.job_name;
+      this.basicData = saved_user_data.basic_data;
+      this.stat_table_front = saved_user_data.stat_table_front;
+      this.stat_table_back = saved_user_data.stat_table_back;
+      this.link_table = saved_user_data.link_table;
+      this.equip_table = saved_user_data.equip_table;
+      this.auxiliary_table = saved_user_data.auxiliary_table;
+      this.core_table = saved_user_data.core_table;
+    }
+    this.initializeJobValues();
+    
+    
+
+
+
     if (typeof Worker !== 'undefined') {
       this.worker = new Worker(
         new URL('../score.worker', import.meta.url)
@@ -94,12 +112,7 @@ export class ScouterComponent implements OnInit {
       );
     }
     
-    // const key_ = 'drive';
-
-    // let key2 = localStorage.getItem(key_);
-
-    // let raw = JSON.parse(key2!);
-    
+   
   }
 
   initializeJobValues()
@@ -180,7 +193,16 @@ export class ScouterComponent implements OnInit {
     
     this.actual_stat = Math.floor(CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)));
 
-
+    localStorage.setItem('user_data', JSON.stringify({
+      job_name: this.userStatData_.jobName,
+      basic_data: this.basicData,
+      stat_table_front : this.stat_table_front,
+      stat_table_back : this.stat_table_back,
+      link_table : this.link_table,
+      equip_table : this.equip_table,
+      auxiliary_table : this.auxiliary_table,
+      core_table : this.core_table,
+    }));
   }
 
   
