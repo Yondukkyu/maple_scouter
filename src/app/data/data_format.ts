@@ -285,14 +285,14 @@ export class jobData
         var ign_coeff = Math.max(0, 1 - monster_guard / 100 * (1-statinfo.ign_dmg / 100));
         var cri_coeff = Math.min(statinfo.cri_rate,100)/100 * (0.35 + statinfo.cri_dmg/100) + 1;
        
-        console.log(prof_coeff)
-        console.log(weap_coeff)
-        console.log(stat_coeff)
-        console.log(att_coeff)
-        console.log(dmg_coeff)
+        // console.log(prof_coeff)
+        // console.log(weap_coeff)
+        // console.log(stat_coeff)
+        // console.log(att_coeff)
+        // console.log(dmg_coeff)
         console.log(final_coeff)
-        console.log(ign_coeff)
-        console.log(cri_coeff)
+        // console.log(ign_coeff)
+        // console.log(cri_coeff)
 
         return Math.floor(prof_coeff * weap_coeff * stat_coeff * att_coeff * dmg_coeff * final_coeff * ign_coeff * cri_coeff);
     }
