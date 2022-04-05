@@ -33,7 +33,7 @@ export class ScouterComponent implements OnInit {
 
   userStatData_:UserStatdata;
 
-  
+  cur_preset_num:string = '';
  
 
   worker!: Worker;
@@ -68,9 +68,7 @@ export class ScouterComponent implements OnInit {
       'MapleScouter - 환산 스탯 계산'
     );
 
-    this.initializeJobValues();
-    
-  
+    this.load_preset_0();
 
     
 
@@ -83,43 +81,7 @@ export class ScouterComponent implements OnInit {
 
   ngOnInit(): void {
 
-    const saved_user_data = JSON.parse(localStorage.getItem('user_data')!);
-    if(saved_user_data)
-    {
-      this.jobName = saved_user_data.job_name;
-      this.basicData = saved_user_data.basic_data;
-      this.stat_table_front = saved_user_data.stat_table_front;
-      this.stat_table_back = saved_user_data.stat_table_back;
-      this.link_table = saved_user_data.link_table;
-      this.equip_table = saved_user_data.equip_table;
-      this.auxiliary_table = saved_user_data.auxiliary_table;
-      this.core_table = saved_user_data.core_table;
-
-      //initialize
-      this.initializeJobValues();
-      this.userStatData_ = new UserStatdata(this.jobdata, this.basicData, this.stat_table_front, this.stat_table_back, this.equip_table, this.auxiliary_table, this.link_table);
-      this.actual_stat = Math.floor(CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)));
-
-    }
-    else
-    {
-      this.initializeJobValues();
-    }
-    
-    
-
-
-
-    if (typeof Worker !== 'undefined') {
-      this.worker = new Worker(
-        new URL('../score.worker', import.meta.url)
-      );
-    } else {
-      this.snackbar.open(
-        'Web Worker가 지원되지 않는 브라우저입니다. 최신 브라우저를 사용해주세요.',
-        '닫기'
-      );
-    }
+    this.load_preset_0();
     
    
   }
@@ -127,6 +89,7 @@ export class ScouterComponent implements OnInit {
   initializeJobValues()
   {
     this.jobdata = new jobData(this.jobName);
+    
 
     if(this.jobdata.jobStatType_== 3)
     {
@@ -212,9 +175,12 @@ export class ScouterComponent implements OnInit {
 
     console.log(this.userStatData_.calc100dmg(this.monster_guard))
 
+  }
 
-    localStorage.setItem('user_data', JSON.stringify({
-      job_name: this.userStatData_.jobName,
+  save()
+  {
+    localStorage.setItem('user_data'+this.cur_preset_num, JSON.stringify({
+      job_name: this.jobName,
       basic_data: this.basicData,
       stat_table_front : this.stat_table_front,
       stat_table_back : this.stat_table_back,
@@ -223,6 +189,50 @@ export class ScouterComponent implements OnInit {
       auxiliary_table : this.auxiliary_table,
       core_table : this.core_table,
     }));
+
+    this.snackbar.open(
+      '스펙 저장 완료',
+      '닫기'
+    );
+  }
+
+  load_preset()
+  {
+    const saved_user_data = JSON.parse(localStorage.getItem('user_data'+this.cur_preset_num)!);
+    if(saved_user_data)
+    {
+      this.jobName = saved_user_data.job_name;
+      this.basicData = saved_user_data.basic_data;
+      this.stat_table_front = saved_user_data.stat_table_front;
+      this.stat_table_back = saved_user_data.stat_table_back;
+      this.link_table = saved_user_data.link_table;
+      this.equip_table = saved_user_data.equip_table;
+      this.auxiliary_table = saved_user_data.auxiliary_table;
+      this.core_table = saved_user_data.core_table;
+
+      //initialize
+      this.initializeJobValues();
+      this.userStatData_ = new UserStatdata(this.jobdata, this.basicData, this.stat_table_front, this.stat_table_back, this.equip_table, this.auxiliary_table, this.link_table);
+      this.actual_stat = Math.floor(CubicSolver(this.spline_data,this.userStatData_.calc100dmg(this.monster_guard)));
+
+    }
+    else
+    {
+      this.initializeJobValues();
+    }
+  }
+
+  load_preset_0()
+  {
+    this.cur_preset_num = '';
+    this.load_preset();
+    
+  }
+
+  load_preset_1()
+  {
+    this.cur_preset_num = '_1';
+    this.load_preset();
   }
 
   
