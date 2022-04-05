@@ -579,6 +579,9 @@ export class UserStatdata
         this.att_mag = Math.ceil(this.stat_atk/((this.sub_stat+4*actual_main_stat)*0.01*job_weap_coeff*(1+this.dmg*0.01)*(1+this.final_dmg*0.01)*(1+this.att_mag_rate*0.01)))
         
         console.log("췡")
+        console.log(this.stat_pure)
+        console.log(this.stat_rate)
+        console.log(this.stat_abs)
         console.log(this.sub_stat)
         console.log(this.stat_atk)
         console.log(this.dmg)
