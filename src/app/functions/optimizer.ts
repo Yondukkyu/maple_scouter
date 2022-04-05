@@ -409,13 +409,13 @@ export  function optimizeHyperUnion_xenon( statinfo:statData,
                                     bossArmor:number)
 {
   var cur_lukStatPure = statinfo.main_stat_pure/3;
-  var cur_lukStatPer = statinfo.main_stat_rate/3;
+  var cur_lukStatPer = statinfo.main_stat_rate;
   var cur_lukStatAbs = statinfo.main_stat_abs/3;
   var cur_dexStatPure = statinfo.sub_stat_pure/3;
-  var cur_dexStatPer = statinfo.sub_stat_rate/3;
+  var cur_dexStatPer = statinfo.sub_stat_rate;
   var cur_dexStatAbs = statinfo.sub_stat_abs/3;
   var cur_strStatPure = statinfo.sub_stat_pure/3;
-  var cur_strStatPer = statinfo.sub_stat_rate/3;
+  var cur_strStatPer = statinfo.sub_stat_rate;
   var cur_strStatAbs = statinfo.sub_stat_abs/3;
   var cur_criProb = statinfo.cri_rate;
   var cur_criDamage = statinfo.cri_dmg;
