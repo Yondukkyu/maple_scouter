@@ -811,7 +811,7 @@ export const jobSubweaptype : Record<jobNames, number> =
 '데몬어벤져': 0,
 }
 
-// 직업링크 어빌 정보(0:보공 1:벞지 2:재사용 3:패시브1렙) 수정
+// 직업 어빌 정보(0:보공 1:벞지 2:재사용 3:패시브1렙) 수정
 export const jobAbilityInfo: Record<jobNames, number> =
 {
 '나이트로드': 0,

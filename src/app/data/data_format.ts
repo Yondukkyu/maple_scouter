@@ -1,5 +1,7 @@
+import { addFinal, coolReduce_final_calc, equilibrium_final_calc, passive_final_calc, recycle_final_calc, template_infinity_final_calc } from "../functions/final_comp";
 import { optimizeHyperUnion, optimizeHyperUnion_demon, optimizeHyperUnion_xenon } from "../functions/optimizer";
 import {equipAuxiliary,
+        equipCool,
         equipCoolComp,
         equipCoolComp_demon,
         equipCoolComp_xenon,
@@ -14,6 +16,8 @@ import {equipAuxiliary,
         equipLevelSmooth,
         equipLevel_demon,
         equipLevel_xenon,
+        equipLumiComp,
+        equipRecycleComp,
         equipSubStat,
         equipSubweap_case1,
         equipSubweap_case2,
@@ -126,7 +130,7 @@ export class statData
         this.att_mag_rate += to_add.att_mag_rate;
         this.dmg += to_add.dmg;
         this.boss_dmg += to_add.boss_dmg;
-        this.final_dmg = (this.final_dmg * 0.01 + 1) * (to_add.final_dmg * 0.01 + 1) * 100 -100;
+        this.final_dmg = addFinal(this.final_dmg, to_add.final_dmg);
         this.ign_dmg = (1 - (1 - this.ign_dmg * 0.01) * (1 - to_add.ign_dmg * 0.01)) * 100;
         this.cri_rate += to_add.cri_rate;
         this.cri_dmg += to_add.cri_dmg;
@@ -220,6 +224,8 @@ export class jobData
         this.passiveData_ = new statData(jobPassive_base[jobName]);
         this.passiveData_.ign_dmg = jobAddIGR[jobName][0];
         this.passiveData_abl1lv = new statData(jobPassive_Lv1[jobName]);
+        this.passiveData_abl1lv.ign_dmg = jobAddIGR[jobName][0];
+
         this.subweap_ = new statData(jobSubweapBase[jobName]);
         this.linkAbility_main = new statData(jobLinkAbilities_main[jobName]);
         this.linkAbility_sub  = new statData(jobLinkAbilities_semi[jobName]);
@@ -230,6 +236,10 @@ export class jobData
         this.doping_ = new statData(jobDopingData[jobName]);
 
         this.statData_ = this.passiveData_ ;
+        if(this.jobability_ == 3)
+        {
+            this.statData_ = this.passiveData_abl1lv;
+        }
         this.statData_.add_stat(this.subweap_);
         this.statData_.add_stat(this.linkAbility_main);
         this.statData_.add_stat(this.farm_);
@@ -454,6 +464,30 @@ export class TemplateData
             this.totalStat_.att_mag += over_rate*2.35;
         }
         //직업 특색에 따른 종댐 보정
+        //벞지 보정
+        if(this.jobData_.buffFinal_ == 2)
+        {
+            this.totalStat_.final_dmg = addFinal(this.totalStat_.final_dmg,equilibrium_final_calc(equipLumiComp[this.gradeName_]));
+        }
+        else if(this.jobData_.buffFinal_ == 1)
+        {
+            this.totalStat_.final_dmg = addFinal(this.totalStat_.final_dmg,template_infinity_final_calc(this.gradeName_));
+        }
+        //쿨감 보정
+        if(this.jobData_.coolReduce_ == 1)
+        {
+            this.totalStat_.final_dmg = addFinal(this.totalStat_.final_dmg,coolReduce_final_calc(this.jobName_,equipCool[this.gradeName_][jobCReff[this.jobName_][3]]))
+        }
+        //패시브, 재사용 보정
+        if(this.jobData_.jobability_ == 3)
+        {
+            this.totalStat_.final_dmg = addFinal(this.totalStat_.final_dmg,passive_final_calc(this.jobName_));
+        } 
+        else if(this.jobData_.jobability_ == 2)
+        {
+            this.totalStat_.final_dmg = addFinal(this.totalStat_.final_dmg,recycle_final_calc(equipRecycleComp[this.gradeName_]));
+        }
+
 
     }
 
