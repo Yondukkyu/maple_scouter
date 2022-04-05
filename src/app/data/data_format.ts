@@ -244,11 +244,15 @@ export class jobData
     {
         if(this.jobName_ == '팔라딘')
         {
-            return Math.floor((18+5*level)*0.16)
+            return Math.floor((18+5*level)*0.16);
+        }
+        else if(this.jobName_ == '제논')
+        {
+            return Math.floor((26+5*level)*0.15);
         }
         else
         {
-            return Math.floor((18+5*level)*0.15)
+            return Math.floor((18+5*level)*0.15);
         }
     }
 

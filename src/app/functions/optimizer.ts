@@ -607,6 +607,11 @@ export  function optimizeHyperUnion_xenon( statinfo:statData,
   var actual_hyp = [hyp_valueList[0][hyp_lvlList[0]], hyp_valueList[1][hyp_lvlList[1]], hyp_valueList[2][hyp_lvlList[2]], hyp_valueList[3][hyp_lvlList[3]], hyp_valueList[4][hyp_lvlList[4]], hyp_valueList[5][hyp_lvlList[5]], hyp_valueList[6][hyp_lvlList[6]], hyp_valueList[7][hyp_lvlList[7]], hyp_valueList[8][hyp_lvlList[8]]];
   var actual_uni = [5 * uni_lvlList[0], 5 * uni_lvlList[1], 5 * uni_lvlList[2],uni_lvlList[3], 0.5*uni_lvlList[4], uni_lvlList[5], uni_lvlList[6], uni_lvlList[7], uni_lvlList[8]];
   
+
+  console.log("51star sheep shake it")
+  console.log(actual_uni[0])
+  console.log(actual_hyp[0])
+
   
   return new statData([actual_uni[0]+actual_uni[1]+actual_uni[2], 0 , actual_hyp[0]+actual_hyp[1]+actual_hyp[2], 0, 0, 0, actual_uni[8]+actual_hyp[8], 0, actual_hyp[6], actual_hyp[7]+actual_uni[7],0,(1-(1-actual_hyp[5]/100)*(1-actual_uni[5]/100))*100,actual_hyp[3]+actual_uni[3], actual_hyp[4]+actual_uni[4]]);
 
