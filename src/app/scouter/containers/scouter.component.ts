@@ -1,6 +1,4 @@
-import { NumberSymbol } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NumberValueAccessor } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
@@ -164,10 +162,6 @@ export class ScouterComponent implements OnInit {
       this.jobTemplateData[ii] = new TemplateData(templategrades[ii],this.jobdata,this.monster_guard, this.actual_final_dmg);
       this.jobMainstatarr[ii]=gradeMainStat[templategrades[ii]];
       this.job100dmgarr[ii]=this.jobTemplateData[ii].calc100dmg();
-      console.log("스카니아 최고의 귀요미 욘두뀨")
-      console.log(this.jobTemplateData[ii].totalStat_.main_stat_pure)
-      console.log(this.jobTemplateData[ii].totalStat_.main_stat_rate) 
-      console.log(this.jobTemplateData[ii].totalStat_.main_stat_abs) 
     }
 
     
