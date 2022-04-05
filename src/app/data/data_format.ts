@@ -464,6 +464,7 @@ export class TemplateData
         }
         this.totalStat_.add_stat(this.optimizeResult_);
 
+        //직업 특색에 따른 종댐 보정
         //초과 크리 보정
         if(this.totalStat_.cri_rate > 100)
         {
@@ -471,11 +472,11 @@ export class TemplateData
             this.totalStat_.cri_rate = 100;
             this.totalStat_.att_mag += over_rate*2.35;
         }
-        //직업 특색에 따른 종댐 보정
         //벞지 보정
         if(this.jobData_.buffFinal_ == 2)
         {
             this.totalStat_.final_dmg = addFinal(this.totalStat_.final_dmg,equilibrium_final_calc(equipLumiComp[this.gradeName_]));
+           
         }
         else if(this.jobData_.buffFinal_ == 1)
         {
@@ -485,6 +486,7 @@ export class TemplateData
         if(this.jobData_.coolReduce_ == 1)
         {
             this.totalStat_.final_dmg = addFinal(this.totalStat_.final_dmg,coolReduce_final_calc(this.jobName_,equipCool[this.gradeName_][jobCReff[this.jobName_][3]]))
+            
         }
         //패시브, 재사용 보정
         if(this.jobData_.jobability_ == 3)
@@ -636,7 +638,16 @@ export class UserStatdata
         
 
         
-        //직업 특색에 따른 종댐 보정
+        //직업 특색에 따른 종댐 보정 (aux 4)
+        if(this.jobData_.criRein_ == 1)
+        {
+            var over_rate = this.auxiliary_data[4] - 100;
+            if(over_rate < 0)
+            {
+                over_rate = 0;
+            }
+            this.statData_.att_mag += over_rate*2.35;
+        }
         //벞지 보정 (aux 3)
         if(this.jobData_.buffFinal_ == 2)
         {
