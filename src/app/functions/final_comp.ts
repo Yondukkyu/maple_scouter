@@ -79,7 +79,7 @@ export function infinity_final_calc(coolDown:number, buffLength:number, unstable
 
     }
 
-    return net_efficiency;
+    return 100 * net_efficiency;
 
 }
 
@@ -179,11 +179,19 @@ export function equilibrium_final_calc(buffLength:number):number
 
 export function coolReduce_final_calc(job_name:jobNames, cool_reduce:number):number
 {
+    if(jobCReff[job_name][3] == 0)
+    {
+        return 0;
+    }
+
     var cool_reduce_table = [0,2,4,5];
     var efficiency = [0,jobCReff[job_name][0],jobCReff[job_name][1],jobCReff[job_name][2]];
 
     var spline_data = polynomial_regression(cool_reduce_table,efficiency,3);
-    return CubicSolver(spline_data, cool_reduce);
+    
+    var assumed_efficiency = spline_data[0] + cool_reduce * spline_data[1] +  cool_reduce * cool_reduce * spline_data[2] + cool_reduce *cool_reduce *cool_reduce *spline_data[3]; 
+
+    return assumed_efficiency * 100;
 
 }
 
