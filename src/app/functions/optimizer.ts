@@ -452,7 +452,7 @@ export  function optimizeHyperUnion_xenon( statinfo:statData,
   ];
   //초기 레벨 값 설정
   var hyp_lvlList = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-  var uni_lvlList = [5, 1, 1, 0, 0, 0, 0, 0, 5];
+  var uni_lvlList = [5, 5, 1, 0, 0, 0, 0, 0, 1];
   //초기 스탯, 보댐은 일단은 0부터 시작. 동일 효율 계산이라 지장 없음.
   var statList = [cur_lukStatPure*(100+cur_lukStatPer)/100+cur_lukStatAbs, cur_dexStatPure*(100+cur_dexStatPer)/100+cur_dexStatAbs, cur_strStatPure*(100+cur_strStatPer)/100+cur_strStatAbs, cur_criProb, cur_criDamage, cur_armorIgnore, cur_damageSum, 0, cur_attPower];
   //각 스탯 변화량에 따른 효율값 저장 컨테이너
