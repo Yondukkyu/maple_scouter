@@ -1,5 +1,13 @@
-import { addFinal, coolReduce_final_calc, equilibrium_final_calc, passive_final_calc, recycle_final_calc, template_infinity_final_calc } from "../functions/final_comp";
-import { optimizeHyperUnion, optimizeHyperUnion_demon, optimizeHyperUnion_xenon } from "../functions/optimizer";
+import { addFinal,
+        coolReduce_final_calc,
+        equilibrium_final_calc,
+        infinity_final_calc,
+        passive_final_calc,
+        recycle_final_calc,
+        template_infinity_final_calc } from "../functions/final_comp";
+import { optimizeHyperUnion,
+        optimizeHyperUnion_demon,
+        optimizeHyperUnion_xenon } from "../functions/optimizer";
 import {equipAuxiliary,
         equipCool,
         equipCoolComp,
@@ -551,12 +559,12 @@ export class UserStatdata
         this.stat_wo_hero = 0;
         this.sub_stat = 0;
 
-        if(jobData.jobStatType_== 2) //제논
+        if(this.jobData_.jobStatType_== 2) //제논
         {
             this.stat_w_hero = statData_front[0]+statData_front[1]+statData_front[2];
             this.stat_wo_hero = statData_front[3]+statData_front[4]+statData_front[5];
         }
-        else if(jobData.jobStatType_== 1) //이중 부스탯
+        else if(this.jobData_.jobStatType_== 1) //이중 부스탯
         {
             this.stat_w_hero = statData_front[0];
             this.stat_wo_hero = statData_front[1];
@@ -625,6 +633,47 @@ export class UserStatdata
 
         this.statData_ = new statData([this.stat_pure, this.stat_rate, this.stat_abs, this.sub_stat,0,0,this.att_mag,this.att_mag_rate,this.dmg+this.link_dmg,this.boss_dmg,this.final_dmg,this.ign_dmg,100,this.cri_dmg]);
 
+        
+
+        
+        //직업 특색에 따른 종댐 보정
+        //벞지 보정 (aux 3)
+        if(this.jobData_.buffFinal_ == 2)
+        {
+            this.statData_.final_dmg = addFinal(this.statData_.final_dmg,equilibrium_final_calc(this.auxiliary_data[3]));
+        }
+        else if(this.jobData_.buffFinal_ == 1)
+        {
+            this.statData_.final_dmg = addFinal(this.statData_.final_dmg,infinity_final_calc(this.auxiliary_data[2], this.auxiliary_data[3], 30, 0.05));
+        }
+        //쿨감 보정 (aux 2)
+        if(this.jobData_.coolReduce_ == 1)
+        {
+            this.statData_.final_dmg = addFinal(this.statData_.final_dmg,coolReduce_final_calc(this.jobName,this.auxiliary_data[2]))
+        }
+        //패시브, 재사용 보정 (aux 1)
+        if(this.jobData_.jobability_ == 3)
+        {
+            if(this.auxiliary_data[1] == 3)
+            {
+                this.statData_.final_dmg = addFinal(this.statData_.final_dmg,passive_final_calc(this.jobName));
+            }
+            else
+            {
+                this.jobData_.jobProperty_[0] = jobPassive_base[this.jobName][14];
+                this.jobData_.jobProperty_[1] = jobPassive_base[this.jobName][15];
+            }
+            
+        } 
+        else if(this.jobData_.jobability_ == 2)
+        {
+            this.statData_.final_dmg = addFinal(this.statData_.final_dmg,recycle_final_calc(this.auxiliary_data[1]));
+        }
+        
+
+
+
+
         this.doping_applied = this.statData_.deepCopy();
         this.doping_applied.add_stat(jobData.doping_);
 
@@ -640,7 +689,7 @@ export class UserStatdata
         }
         this.doping_applied.ign_dmg = (1 - (1 -this.doping_applied.ign_dmg * 0.01) * (1 - jobAddIGR[this.jobName][1] * 0.01) * (1 - auxiliaryData[0] * 2 * 0.01)) * 100;
         
-        
+
     }
 
     calc100dmg(monster_gaurd_rate:number):number
